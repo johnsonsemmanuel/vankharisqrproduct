@@ -8,6 +8,7 @@ import Section from "@/components/Section";
 import ImageGallery from "@/components/ImageGallery";
 import UsageGuide from "@/components/UsageGuide";
 import SpecsTable from "@/components/SpecsTable";
+import RichSection from "@/components/RichSection";
 import Link from "next/link";
 
 export default function ProductPage() {
@@ -67,6 +68,21 @@ export default function ProductPage() {
       <Section title="Specifications" delay={0.3}>
         <SpecsTable specs={product.specs} />
       </Section>
+
+      {/* Rich Sections */}
+      {product.sections && product.sections.length > 0 && (
+        <div className="border-t border-kharis-green-100">
+          <div className="px-5 pt-6 pb-2">
+            <h2 className="text-lg font-bold text-kharis-green-800 flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-kharis-gold-500 rounded-full inline-block" />
+              More Information
+            </h2>
+          </div>
+          {product.sections.map((section, i) => (
+            <RichSection key={i} section={section} index={i} />
+          ))}
+        </div>
+      )}
 
       {/* Prev / Next navigation */}
       <section className="px-5 py-6 flex gap-3">
