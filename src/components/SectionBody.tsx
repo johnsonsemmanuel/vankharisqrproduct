@@ -3,7 +3,7 @@ import type { RichSection as RichSectionType } from "@/types";
 export default function SectionBody({ section }: { section: RichSectionType }) {
   if (section.type === "paragraph" && section.body) {
     return (
-      <p className="text-sm text-kharis-green-700 dark:text-neutral-300 leading-relaxed whitespace-pre-line">
+      <p className="text-sm text-kharis-green-700 dark:text-neutral-200 leading-relaxed whitespace-pre-line">
         {section.body}
       </p>
     );
@@ -13,7 +13,7 @@ export default function SectionBody({ section }: { section: RichSectionType }) {
     return (
       <ul className="space-y-1.5">
         {section.items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-kharis-green-700 dark:text-neutral-300">
+          <li key={i} className="flex items-start gap-2 text-sm text-kharis-green-700 dark:text-neutral-200">
             <span className="w-1.5 h-1.5 rounded-full bg-kharis-gold-500 mt-1.5 shrink-0" />
             <span className="leading-relaxed">{item}</span>
           </li>
@@ -39,7 +39,7 @@ export default function SectionBody({ section }: { section: RichSectionType }) {
               {step.title && (
                 <h4 className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100">{step.title}</h4>
               )}
-              <p className="text-sm text-kharis-green-600 dark:text-neutral-400 leading-relaxed">{step.description}</p>
+              <p className="text-sm text-kharis-green-600 dark:text-neutral-300 leading-relaxed">{step.description}</p>
             </div>
           </div>
         ))}
@@ -52,19 +52,19 @@ export default function SectionBody({ section }: { section: RichSectionType }) {
       <div className="space-y-4">
         {section.columns.map((col, i) => (
           <div key={i}>
-            <h4 className="text-sm font-bold text-kharis-green-700 dark:text-neutral-300 mb-1.5">{col.heading}</h4>
+            <h4 className="text-sm font-bold text-kharis-green-700 dark:text-neutral-200 mb-1.5">{col.heading}</h4>
             <div className="flex flex-wrap gap-1.5">
               {col.items.map((item, j) => (
                 <span
                   key={j}
-                  className="inline-block px-2.5 py-1 bg-kharis-green-50 dark:bg-neutral-900 text-sm text-kharis-green-700 dark:text-neutral-300 rounded-lg"
+                  className="inline-block px-2.5 py-1 bg-kharis-green-50 dark:bg-neutral-900 text-sm text-kharis-green-700 dark:text-neutral-200 rounded-lg"
                 >
                   {item}
                 </span>
               ))}
             </div>
             {col.note && (
-              <p className="mt-1 text-xs text-kharis-green-500 dark:text-neutral-400 italic">{col.note}</p>
+              <p className="mt-1 text-xs text-kharis-green-500 dark:text-neutral-300 italic">{col.note}</p>
             )}
           </div>
         ))}
@@ -77,7 +77,7 @@ export default function SectionBody({ section }: { section: RichSectionType }) {
       <div className="bg-kharis-green-50 dark:bg-neutral-900 rounded-xl overflow-hidden divide-y divide-kharis-green-100 dark:divide-neutral-800">
         {section.rows.map((row, i) => (
           <div key={i} className="flex items-start justify-between px-4 py-3">
-            <span className="text-sm font-medium text-kharis-green-700 dark:text-neutral-300">{row.label}</span>
+            <span className="text-sm font-medium text-kharis-green-700 dark:text-neutral-200">{row.label}</span>
             <span className="text-sm text-kharis-green-900 dark:text-neutral-100 text-right max-w-[60%]">{row.value}</span>
           </div>
         ))}

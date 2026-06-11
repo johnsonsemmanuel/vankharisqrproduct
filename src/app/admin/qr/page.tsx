@@ -43,14 +43,14 @@ export default function AdminQRPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/admin"
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-neutral-400 hover:text-gray-800 dark:hover:text-neutral-100 transition-colors"
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-neutral-300 hover:text-gray-800 dark:hover:text-neutral-100 transition-colors"
             >
               <LayoutDashboard className="size-3.5" />
               Dashboard
             </Link>
             <button
               onClick={() => { adminLogout(); router.push("/admin"); }}
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-neutral-500 hover:text-red-500 transition-colors"
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-neutral-400 hover:text-red-500 transition-colors"
             >
               <LogOut className="size-3.5" />
               Logout
@@ -149,7 +149,7 @@ function ProductQRCard({
       <div className="p-5 flex flex-col items-center gap-5">
         <div className="text-center">
           <h2 className="text-base font-bold text-gray-800 dark:text-neutral-100">{product.name}</h2>
-          <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5 break-all">{productUrl}</p>
+          <p className="text-xs text-gray-500 dark:text-neutral-300 mt-0.5 break-all">{productUrl}</p>
         </div>
 
         <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 dark:border-neutral-800 py-6 px-8 w-full">
@@ -163,7 +163,7 @@ function ProductQRCard({
         </div>
 
         <div className="flex w-full items-center justify-between rounded-xl bg-gray-50 dark:bg-neutral-950 px-4 py-3">
-          <span className="text-sm font-medium text-gray-700 dark:text-neutral-300 truncate mr-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-neutral-200 truncate mr-2">
             {productUrl}
           </span>
           <Button
@@ -178,7 +178,7 @@ function ProductQRCard({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             ) : (
-              <svg className="size-4 text-gray-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <svg className="size-4 text-gray-400 dark:text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 15c0-2.828 0-4.243.879-5.121C10.757 9 12.172 9 15 9h1c2.828 0 4.243 0 5.121.879C22 10.757 22 12.172 22 15v1c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22h-1c-2.828 0-4.243 0-5.121-.879C9 20.243 9 18.828 9 16z" />
                 <path d="M17 9c-.003-2.957-.047-4.489-.908-5.538a4 4 0 0 0-.554-.554C14.43 2 12.788 2 9.5 2c-3.287 0-4.931 0-6.038.908a4 4 0 0 0-.554.554C2 4.57 2 6.212 2 9.5c0 3.287 0 4.931.908 6.038a4 4 0 0 0 .554.554c1.05.86 2.58.906 5.538.908" />
               </svg>
@@ -191,24 +191,24 @@ function ProductQRCard({
             onClick={handleDownloadSVG}
             className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-neutral-800 px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
           >
-            <svg className="size-5 text-gray-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="size-5 text-gray-400 dark:text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 11l5 5 5-5M12 4v12" />
             </svg>
             <div className="text-left">
               <p className="text-sm font-semibold text-gray-800 dark:text-neutral-100">SVG</p>
-              <p className="text-xs text-gray-400 dark:text-neutral-500">Scalable</p>
+              <p className="text-xs text-gray-400 dark:text-neutral-400">Scalable</p>
             </div>
           </button>
           <button
             onClick={handleDownloadPNG}
             className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-neutral-800 px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
           >
-            <svg className="size-5 text-gray-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="size-5 text-gray-400 dark:text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 11l5 5 5-5M12 4v12" />
             </svg>
             <div className="text-left">
               <p className="text-sm font-semibold text-gray-800 dark:text-neutral-100">PNG</p>
-              <p className="text-xs text-gray-400 dark:text-neutral-500">High-res</p>
+              <p className="text-xs text-gray-400 dark:text-neutral-400">High-res</p>
             </div>
           </button>
         </div>

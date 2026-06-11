@@ -39,7 +39,7 @@ export default function AdminPage() {
               <ShieldAlert className="w-6 h-6 text-kharis-green-700" />
             </div>
             <h1 className="text-lg font-bold text-gray-800 dark:text-neutral-100 mb-1">Admin Access</h1>
-            <p className="text-sm text-gray-500 dark:text-neutral-400 mb-6">
+            <p className="text-sm text-gray-500 dark:text-neutral-300 mb-6">
               Enter password to access the admin dashboard.
             </p>
 
@@ -55,13 +55,13 @@ export default function AdminPage() {
                   placeholder="Password"
                   className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 dark:border-neutral-800 text-sm
                     focus:outline-none focus:ring-2 focus:ring-kharis-green-500/30 focus:border-kharis-green-500
-                    placeholder:text-gray-400 dark:text-neutral-500"
+                    placeholder:text-gray-400 dark:text-neutral-400"
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-neutral-100 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-neutral-100 transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -98,7 +98,7 @@ export default function AdminPage() {
               onClick={() => { logout(); setAuthenticated(false); }}
               variant="ghost"
               size="sm"
-              className="text-gray-400 dark:text-neutral-500 hover:text-red-500"
+              className="text-gray-400 dark:text-neutral-400 hover:text-red-500"
             >
               <LogOut className="w-4 h-4" />
               Logout
@@ -110,7 +110,7 @@ export default function AdminPage() {
       <div className="max-w-lg mx-auto px-5 py-12">
         <div className="text-center mb-8">
           <h2 className="text-lg font-bold text-gray-800 dark:text-neutral-100">Dashboard</h2>
-          <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">Manage QR codes and view scan analytics.</p>
+          <p className="text-sm text-gray-500 dark:text-neutral-300 mt-1">Manage QR codes and view scan analytics.</p>
         </div>
 
         <div className="space-y-4">
@@ -129,11 +129,11 @@ export default function AdminPage() {
               <p className="text-sm font-bold text-gray-800 dark:text-neutral-100 group-hover:text-kharis-green-700 transition-colors">
                 QR Code Generator
               </p>
-              <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
+              <p className="text-xs text-gray-500 dark:text-neutral-300 mt-0.5">
                 Generate branded QR codes with download options.
               </p>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-600 group-hover:text-kharis-green-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+            <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-500 group-hover:text-kharis-green-500 group-hover:translate-x-0.5 transition-all shrink-0" />
           </Link>
 
           <Link
@@ -151,11 +151,11 @@ export default function AdminPage() {
               <p className="text-sm font-bold text-gray-800 dark:text-neutral-100 group-hover:text-kharis-green-700 transition-colors">
                 Analytics
               </p>
-              <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
+              <p className="text-xs text-gray-500 dark:text-neutral-300 mt-0.5">
                 View scan statistics and device breakdowns.
               </p>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-600 group-hover:text-kharis-gold-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+            <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-500 group-hover:text-kharis-gold-600 group-hover:translate-x-0.5 transition-all shrink-0" />
           </Link>
         </div>
       </div>

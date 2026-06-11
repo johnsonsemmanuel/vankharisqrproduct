@@ -70,7 +70,7 @@ export default function ProductPage() {
         <div className="flex items-center justify-between px-4 h-12">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-sm font-medium text-kharis-green-600 dark:text-neutral-300 active:text-kharis-green-800 dark:active:text-neutral-100 transition-colors"
+            className="flex items-center gap-1.5 text-sm font-medium text-kharis-green-600 dark:text-neutral-200 active:text-kharis-green-800 dark:active:text-neutral-100 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             All Products
@@ -84,7 +84,7 @@ export default function ProductPage() {
 
       {/* Product Description */}
       <Section title="Description">
-        <p className="text-sm text-kharis-green-700 dark:text-neutral-300 leading-relaxed">
+        <p className="text-sm text-kharis-green-700 dark:text-neutral-200 leading-relaxed">
           {product.description}
         </p>
       </Section>
@@ -135,9 +135,9 @@ export default function ProductPage() {
             className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200 dark:border-neutral-800
               active:bg-kharis-green-50 dark:active:bg-neutral-900 transition-colors"
           >
-            <ChevronLeft className="w-4 h-4 text-kharis-green-500 dark:text-neutral-400 shrink-0" />
+            <ChevronLeft className="w-4 h-4 text-kharis-green-500 dark:text-neutral-300 shrink-0" />
             <div className="min-w-0">
-              <div className="text-xs text-kharis-green-500 dark:text-neutral-400">Previous</div>
+              <div className="text-xs text-kharis-green-500 dark:text-neutral-300">Previous</div>
               <div className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100 truncate">{prev.name}</div>
             </div>
           </Link>
@@ -151,10 +151,10 @@ export default function ProductPage() {
               active:bg-kharis-green-50 dark:active:bg-neutral-900 transition-colors text-right"
           >
             <div className="min-w-0 flex-1">
-              <div className="text-xs text-kharis-green-500 dark:text-neutral-400">Next</div>
+              <div className="text-xs text-kharis-green-500 dark:text-neutral-300">Next</div>
               <div className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100 truncate">{next.name}</div>
             </div>
-            <ChevronRight className="w-4 h-4 text-kharis-green-500 dark:text-neutral-400 shrink-0" />
+            <ChevronRight className="w-4 h-4 text-kharis-green-500 dark:text-neutral-300 shrink-0" />
           </Link>
         ) : (
           <div className="flex-1" />
@@ -163,10 +163,10 @@ export default function ProductPage() {
 
       {/* Footer */}
       <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-neutral-800 text-center">
-        <p className="text-xs text-kharis-green-400 dark:text-neutral-500">
+        <p className="text-xs text-kharis-green-400 dark:text-neutral-400">
           &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
         </p>
-        <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-300">
+        <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-200">
           Member of{" "}
           <a
             href="https://vankharis.com"

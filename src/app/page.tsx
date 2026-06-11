@@ -38,7 +38,7 @@ export default function HomePage() {
               <span className="font-bold text-kharis-green-800 dark:text-neutral-100 text-sm">Kharis Foods</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-xs text-kharis-green-500 dark:text-neutral-400 font-medium">Product Guide</span>
+              <span className="text-xs text-kharis-green-500 dark:text-neutral-300 font-medium">Product Guide</span>
               <ThemeToggle />
             </div>
           </div>
@@ -49,7 +49,7 @@ export default function HomePage() {
           <h1 className="text-2xl font-extrabold text-kharis-green-800 dark:text-neutral-100 leading-tight">
             Our Products
           </h1>
-          <p className="mt-1.5 text-sm text-kharis-green-500 dark:text-neutral-400 max-w-xs">
+          <p className="mt-1.5 text-sm text-kharis-green-500 dark:text-neutral-300 max-w-xs">
             Scan the QR code on your product bag for detailed usage instructions.
           </p>
         </section>
@@ -65,10 +65,10 @@ export default function HomePage() {
 
         {/* Footer */}
         <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-neutral-800 text-center">
-          <p className="text-xs text-kharis-green-400 dark:text-neutral-500">
+          <p className="text-xs text-kharis-green-400 dark:text-neutral-400">
             &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
           </p>
-          <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-300">
+          <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-200">
             Member of{" "}
             <a
               href="https://vankharis.com"

@@ -40,7 +40,7 @@ export default function Accordion({ items }: AccordionProps) {
                 </h3>
               </div>
               <ChevronDown
-                className={`w-4 h-4 text-kharis-green-500 dark:text-neutral-400 shrink-0 transition-transform duration-200 ${
+                className={`w-4 h-4 text-kharis-green-500 dark:text-neutral-300 shrink-0 transition-transform duration-200 ${
                   isOpen ? "rotate-180" : ""
                 }`}
               />
