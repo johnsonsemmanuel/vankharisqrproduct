@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, notFound } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { products } from "@/data/products";
 import ProductHero from "@/components/ProductHero";
 import Section from "@/components/Section";
@@ -10,6 +10,7 @@ import UsageGuide from "@/components/UsageGuide";
 import SpecsTable from "@/components/SpecsTable";
 import RichSection from "@/components/RichSection";
 import Link from "next/link";
+import { ArrowLeft, ChevronLeft, ChevronRight, Info } from "lucide-react";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -21,12 +22,24 @@ export default function ProductPage() {
   const prev = currentIndex > 0 ? products[currentIndex - 1] : null;
   const next = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
+    <>
+      <motion.div
+        className="fixed top-0 left-0 right-0 z-50 h-1 origin-left bg-kharis-gold-500"
+        style={{ scaleX }}
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
       {/* Back navigation */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-kharis-green-100">
         <div className="flex items-center gap-3 px-4 h-12">
@@ -34,9 +47,7 @@ export default function ProductPage() {
             href="/"
             className="flex items-center gap-1.5 text-sm font-medium text-kharis-green-600 active:text-kharis-green-800 transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <ArrowLeft className="w-4 h-4" />
             All Products
           </Link>
         </div>
@@ -76,7 +87,8 @@ export default function ProductPage() {
         <div className="border-t border-kharis-green-100">
           <div className="px-5 pt-6 pb-2">
             <h2 className="text-lg font-bold text-kharis-green-800 flex items-center gap-2">
-              <span className="w-1.5 h-6 bg-kharis-gold-500 rounded-full inline-block" />
+              <span className="w-1.5 h-6 bg-kharis-gold-500 rounded-full inline-block shrink-0" />
+              <Info className="w-4 h-4 text-kharis-gold-500 shrink-0" />
               More Information
             </h2>
           </div>
@@ -94,9 +106,7 @@ export default function ProductPage() {
             className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200
               active:bg-kharis-green-50 transition-colors"
           >
-            <svg className="w-4 h-4 text-kharis-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft className="w-4 h-4 text-kharis-green-500 shrink-0" />
             <div className="min-w-0">
               <div className="text-xs text-kharis-green-500">Previous</div>
               <div className="text-sm font-bold text-kharis-green-800 truncate">{prev.name}</div>
@@ -115,9 +125,7 @@ export default function ProductPage() {
               <div className="text-xs text-kharis-green-500">Next</div>
               <div className="text-sm font-bold text-kharis-green-800 truncate">{next.name}</div>
             </div>
-            <svg className="w-4 h-4 text-kharis-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight className="w-4 h-4 text-kharis-green-500 shrink-0" />
           </Link>
         ) : (
           <div className="flex-1" />
@@ -142,5 +150,6 @@ export default function ProductPage() {
         </p>
       </footer>
     </motion.div>
+    </>
   );
 }

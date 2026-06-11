@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { RichSection as RichSectionType } from "@/types";
+import { getSectionIcon } from "@/lib/section-icons";
 
 interface RichSectionProps {
   section: RichSectionType;
@@ -9,6 +10,8 @@ interface RichSectionProps {
 }
 
 export default function RichSection({ section, index }: RichSectionProps) {
+  const Icon = getSectionIcon(section.title);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -19,7 +22,8 @@ export default function RichSection({ section, index }: RichSectionProps) {
     >
       <div className="px-5 py-6">
         <h3 className="text-base font-bold text-kharis-green-800 mb-3 flex items-center gap-2">
-          <span className="w-1 h-5 bg-kharis-gold-500 rounded-full inline-block" />
+          <span className="w-1 h-5 bg-kharis-gold-500 rounded-full inline-block shrink-0" />
+          <Icon className="w-4 h-4 text-kharis-gold-500 shrink-0" />
           {section.title}
         </h3>
 
