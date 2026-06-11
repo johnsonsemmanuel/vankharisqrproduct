@@ -53,8 +53,8 @@ export default function HomePage() {
         {/* Product Grid */}
         <section className="px-5 pb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {cardData.map((p, i) => (
-              <ProductCard key={p.slug} product={p} index={i} />
+            {cardData.map((p) => (
+              <ProductCard key={p.slug} product={p} index={0} />
             ))}
           </div>
         </section>
