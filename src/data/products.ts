@@ -328,7 +328,7 @@ export const products: Product[] = [
           },
           {
             title: "Boil Water",
-            description: "Boil the remaining water (3–4 cups) in a clean cooking pot.",
+            description: "Boil the remaining water in a clean cooking pot.",
           },
           {
             title: "Combine and Cook",
@@ -387,6 +387,7 @@ export const products: Product[] = [
           {
             heading: "Baking",
             items: ["Bread", "Muffins", "Pancakes", "Biscuits", "Cookies"],
+            note: "Often mixed with wheat flour to improve nutrition and texture.",
           },
           {
             heading: "Thickening Agent",

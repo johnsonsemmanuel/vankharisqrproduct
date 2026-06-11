@@ -27,6 +27,7 @@ export interface RichSection {
   columns?: {
     heading: string;
     items: string[];
+    note?: string;
   }[];
   rows?: { label: string; value: string }[];
 }

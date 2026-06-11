@@ -78,6 +78,9 @@ export default function RichSection({ section, index }: RichSectionProps) {
                     </span>
                   ))}
                 </div>
+                {col.note && (
+                  <p className="mt-1 text-xs text-kharis-green-500 italic">{col.note}</p>
+                )}
               </div>
             ))}
           </div>
