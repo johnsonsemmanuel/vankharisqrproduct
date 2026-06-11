@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-kharis-green-50: #e8f5e9;
   --color-kharis-green-100: #c8e6c9;
@@ -45,7 +47,7 @@ html {
 }
 
 body {
-  @apply bg-white text-kharis-green-900 antialiased;
+  @apply bg-white text-kharis-green-900 antialiased dark:bg-kharis-green-900 dark:text-kharis-green-100;
 }
 
 ::selection {

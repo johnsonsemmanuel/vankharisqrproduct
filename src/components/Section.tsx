@@ -18,9 +18,9 @@ export default function Section({ title, children, delay = 0 }: SectionProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay }}
-      className="px-5 py-8 border-b border-kharis-green-100 last:border-b-0"
+      className="px-5 py-8 border-b border-kharis-green-100 dark:border-kharis-green-700 last:border-b-0"
     >
-      <h2 className="text-lg font-bold text-kharis-green-800 mb-4 flex items-center gap-2">
+      <h2 className="text-lg font-bold text-kharis-green-800 dark:text-kharis-green-100 mb-4 flex items-center gap-2">
         <span className="w-1.5 h-6 bg-kharis-gold-500 rounded-full inline-block shrink-0" />
         <Icon className="w-4 h-4 text-kharis-gold-500 shrink-0" />
         {title}

@@ -26,21 +26,21 @@ export default function Accordion({ items }: AccordionProps) {
         return (
           <div
             key={i}
-            className="border-b border-kharis-green-100 last:border-b-0"
+            className="border-b border-kharis-green-100 dark:border-kharis-green-700 last:border-b-0"
           >
             <button
               onClick={() => setOpenIndex(isOpen ? null : i)}
-              className="w-full flex items-center justify-between px-5 py-4 text-left active:bg-kharis-green-50 transition-colors"
+              className="w-full flex items-center justify-between px-5 py-4 text-left active:bg-kharis-green-50 dark:active:bg-kharis-green-800 transition-colors"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <span className="w-1 h-5 bg-kharis-gold-500 rounded-full inline-block shrink-0" />
                 <Icon className="w-4 h-4 text-kharis-gold-500 shrink-0" />
-                <h3 className="text-base font-bold text-kharis-green-800">
+                <h3 className="text-base font-bold text-kharis-green-800 dark:text-kharis-green-100">
                   {item.title}
                 </h3>
               </div>
               <ChevronDown
-                className={`w-4 h-4 text-kharis-green-500 shrink-0 transition-transform duration-200 ${
+                className={`w-4 h-4 text-kharis-green-500 dark:text-kharis-green-400 shrink-0 transition-transform duration-200 ${
                   isOpen ? "rotate-180" : ""
                 }`}
               />

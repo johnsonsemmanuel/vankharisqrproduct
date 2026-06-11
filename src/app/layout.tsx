@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Kharis Foods — Product Guide",
@@ -31,11 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-dvh bg-white">
-        <main className="mx-auto max-w-lg min-h-dvh bg-white shadow-sm">
-          {children}
-        </main>
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-dvh">
+        <ThemeProvider>
+          <main className="mx-auto max-w-lg min-h-dvh bg-white dark:bg-kharis-green-900 shadow-sm dark:shadow-kharis-green-800/20">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

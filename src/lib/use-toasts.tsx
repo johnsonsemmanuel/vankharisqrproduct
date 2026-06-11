@@ -150,18 +150,16 @@ const ToastContainer = () => {
     if (index === length - 1) {
       return "none";
     }
-    const offset = length - 1 - index;
-    let translateY = toasts[length - 1]?.measuredHeight || 63;
+    let translateY = 0;
     for (let i = length - 1; i > index; i--) {
-      if (isHovered) {
-        translateY += (toasts[i - 1]?.measuredHeight || 63) + 10;
-      } else {
-        translateY += 20;
-      }
+      translateY += isHovered
+        ? (toasts[i]?.measuredHeight ?? 63) + 10
+        : 20;
     }
+    const offset = length - 1 - index;
     const z = -offset;
     const scale = isHovered ? 1 : (1 - 0.05 * offset);
-    return `translate3d(0, calc(100% - ${translateY}px), ${z}px) scale(${scale})`;
+    return `translate3d(0, ${translateY}px, ${z}px) scale(${scale})`;
   };
 
   const handleMouseEnter = () => {
@@ -195,7 +193,7 @@ const ToastContainer = () => {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-[9999] pointer-events-none w-[420px]"
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none w-[calc(100vw-32px)] max-w-[420px]"
       style={{ height: containerHeight }}
     >
       <div
@@ -212,17 +210,17 @@ const ToastContainer = () => {
               key={toast.id}
               ref={measureRef(toast)}
               className={clsx(
-                "absolute right-0 bottom-0 rounded-xl p-4 h-fit leading-[21px]",
+                "absolute left-0 top-0 rounded-xl p-4 h-fit leading-[21px]",
                 typeStyles[toast.type],
                 isVisible ? "opacity-100" : "opacity-0",
                 index < lastVisibleStart && "pointer-events-none"
               )}
               style={{
-                width: 420,
+                width: "100%",
                 transition: "all .35s cubic-bezier(.25,.75,.6,.98)",
                 transform: shownIds.includes(toast.id)
                   ? getFinalTransform(index, toasts.length)
-                  : "translate3d(0, 100%, 150px) scale(1)"
+                  : "translate3d(0, -100%, 150px) scale(1)"
               }}
             >
               <div className="flex flex-col items-center justify-between text-[.875rem]">
@@ -287,7 +285,7 @@ const ToastContainer = () => {
 const mountContainer = () => {
   if (root) return;
   const el = document.createElement("div");
-  el.className = "fixed bottom-4 right-4 z-[9999]";
+  el.className = "fixed top-4 left-1/2 -translate-x-1/2 z-[9999]";
   document.body.appendChild(el);
   root = createRoot(el);
   root.render(<ToastContainer />);
