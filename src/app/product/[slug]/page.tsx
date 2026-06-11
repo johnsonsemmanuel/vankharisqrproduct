@@ -130,7 +130,15 @@ export default function ProductPage() {
           &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
         </p>
         <p className="mt-1 text-xs font-semibold text-kharis-green-600">
-          Member of Vankharis Limited
+          Member of{" "}
+          <a
+            href="https://vankharis.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-kharis-green-800 transition-colors"
+          >
+            Vankharis Limited
+          </a>
         </p>
       </footer>
     </motion.div>
