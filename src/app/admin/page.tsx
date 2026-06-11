@@ -55,7 +55,7 @@ export default function AdminPage() {
                   placeholder="Password"
                   className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 dark:border-neutral-800 text-sm
                     focus:outline-none focus:ring-2 focus:ring-kharis-green-500/30 focus:border-kharis-green-500
-                    placeholder:text-gray-400 dark:text-neutral-400"
+                    placeholder:text-gray-400 dark:placeholder:text-neutral-500 dark:text-neutral-300"
                   autoFocus
                 />
                 <button

@@ -14,7 +14,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] bg-kharis-green-50 overflow-hidden"
+        className="aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] bg-kharis-green-50 dark:bg-neutral-800 overflow-hidden"
       >
         <img
           src={product.images[0]}

@@ -20,7 +20,7 @@ export default function ImageGallery({ images, productName }: ImageGalleryProps)
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="aspect-[4/3] bg-kharis-green-50 rounded-xl overflow-hidden"
+          className="aspect-[4/3] bg-kharis-green-50 dark:bg-neutral-800 rounded-xl overflow-hidden"
         >
           <img
             src={images[selected]}
@@ -39,7 +39,7 @@ export default function ImageGallery({ images, productName }: ImageGalleryProps)
               className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200
                 ${i === selected
                   ? "border-kharis-gold-500 ring-1 ring-kharis-gold-500"
-                  : "border-kharis-green-100 opacity-70 hover:opacity-100"
+                  : "border-kharis-green-100 dark:border-neutral-700 opacity-70 hover:opacity-100"
                 }`}
             >
               <img
