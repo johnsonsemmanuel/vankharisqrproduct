@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { QrCode, BarChart3, ShieldAlert, LogIn } from "lucide-react";
-import { checkAuth, login } from "@/lib/admin-auth";
+import Link from "next/link";
+import { QrCode, BarChart3, ShieldAlert, LogIn, LogOut, ChevronRight } from "lucide-react";
+import { checkAuth, login, logout } from "@/lib/admin-auth";
 import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
-  const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -60,10 +59,7 @@ export default function AdminPage() {
               {error && (
                 <p className="text-xs text-red-500 text-center">Incorrect password.</p>
               )}
-              <Button
-                type="submit"
-                className="w-full"
-              >
+              <Button type="submit" className="w-full">
                 <LogIn className="w-4 h-4" />
                 Sign In
               </Button>
@@ -86,7 +82,17 @@ export default function AdminPage() {
             />
             <h1 className="font-bold text-gray-800 text-sm">Admin</h1>
           </div>
-          <span className="text-xs text-gray-400">Internal Use</span>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => { logout(); setAuthenticated(false); }}
+              variant="ghost"
+              size="sm"
+              className="text-gray-400 hover:text-red-500"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -97,37 +103,49 @@ export default function AdminPage() {
         </div>
 
         <div className="space-y-4">
-          <button
-            onClick={() => router.push("/admin/qr")}
-            className="w-full flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-200
-              hover:border-kharis-green-300 hover:shadow-sm active:bg-gray-50 transition-all text-left"
+          <Link
+            href="/admin/qr"
+            className="group flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-200
+              hover:border-kharis-green-300 hover:shadow-md hover:-translate-y-0.5
+              active:translate-y-0 active:shadow-sm
+              transition-all duration-200 text-left"
           >
-            <div className="w-12 h-12 rounded-xl bg-kharis-green-100 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-kharis-green-100 flex items-center justify-center shrink-0
+              group-hover:bg-kharis-green-200 transition-colors">
               <QrCode className="w-6 h-6 text-kharis-green-700" />
             </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-gray-800">QR Code Generator</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-gray-800 group-hover:text-kharis-green-700 transition-colors">
+                QR Code Generator
+              </p>
               <p className="text-xs text-gray-500 mt-0.5">
                 Generate branded QR codes with download options.
               </p>
             </div>
-          </button>
+            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-kharis-green-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </Link>
 
-          <button
-            onClick={() => router.push("/admin/analytics")}
-            className="w-full flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-200
-              hover:border-kharis-green-300 hover:shadow-sm active:bg-gray-50 transition-all text-left"
+          <Link
+            href="/admin/analytics"
+            className="group flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-200
+              hover:border-kharis-green-300 hover:shadow-md hover:-translate-y-0.5
+              active:translate-y-0 active:shadow-sm
+              transition-all duration-200 text-left"
           >
-            <div className="w-12 h-12 rounded-xl bg-kharis-gold-100 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-kharis-gold-100 flex items-center justify-center shrink-0
+              group-hover:bg-kharis-gold-200 transition-colors">
               <BarChart3 className="w-6 h-6 text-kharis-gold-700" />
             </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-gray-800">Analytics</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-gray-800 group-hover:text-kharis-green-700 transition-colors">
+                Analytics
+              </p>
               <p className="text-xs text-gray-500 mt-0.5">
                 View scan statistics and device breakdowns.
               </p>
             </div>
-          </button>
+            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-kharis-gold-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </Link>
         </div>
       </div>
     </div>

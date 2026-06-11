@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   BarChart3, Smartphone, Monitor, Tablet, Globe, Clock,
-  RefreshCw, TrendingUp, Hash, Package, LayoutDashboard,
+  RefreshCw, TrendingUp, Hash, Package, LayoutDashboard, LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { checkAuth } from "@/lib/admin-auth";
+import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
 import type { AnalyticsSnapshot } from "@/lib/analytics-types";
 
 export default function AnalyticsPage() {
@@ -57,13 +57,22 @@ export default function AnalyticsPage() {
             />
             <h1 className="font-bold text-gray-800 text-sm">Analytics</h1>
           </div>
-          <Link
-            href="/admin"
-            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
-          >
-            <LayoutDashboard className="size-3.5" />
-            Dashboard
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              <LayoutDashboard className="size-3.5" />
+              Dashboard
+            </Link>
+            <button
+              onClick={() => { adminLogout(); router.push("/admin"); }}
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <LogOut className="size-3.5" />
+              Logout
+            </button>
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-400">Realtime</span>
             <Button

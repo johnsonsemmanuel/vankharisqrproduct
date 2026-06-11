@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import QRCodeStyling from "qr-code-styling";
 import Link from "next/link";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
-import { checkAuth } from "@/lib/admin-auth";
+import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
 
 const BASE_URL = "https://kharisfoods.vankharis.com";
 
@@ -40,13 +40,22 @@ export default function AdminQRPage() {
             />
             <h1 className="font-bold text-gray-800 text-sm">QR Codes</h1>
           </div>
-          <Link
-            href="/admin"
-            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
-          >
-            <LayoutDashboard className="size-3.5" />
-            Dashboard
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              <LayoutDashboard className="size-3.5" />
+              Dashboard
+            </Link>
+            <button
+              onClick={() => { adminLogout(); router.push("/admin"); }}
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <LogOut className="size-3.5" />
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
