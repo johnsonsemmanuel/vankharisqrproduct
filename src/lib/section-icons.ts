@@ -1,4 +1,4 @@
-import { type LucideIcon, FileText, Image, BookOpen, List, Info, Heart, TriangleAlert, Lightbulb, Package, UtensilsCrossed, Sparkles, Droplets, CookingPot, ShieldCheck, ChefHat } from "lucide-react";
+import { type LucideIcon, FileText, Image, BookOpen, List, Info, Heart, TriangleAlert, Lightbulb, Package, UtensilsCrossed, Droplets, CookingPot, ShieldCheck, ChefHat } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
   description: FileText,
@@ -11,7 +11,7 @@ const iconMap: Record<string, LucideIcon> = {
   safety: TriangleAlert,
   hygiene: ShieldCheck,
   tips: Lightbulb,
-  uses: Sparkles,
+  uses: Info,
   serving: UtensilsCrossed,
   wash: Droplets,
   preparation: ChefHat,

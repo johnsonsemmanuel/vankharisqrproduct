@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useParams, notFound } from "next/navigation";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { products } from "@/data/products";
@@ -8,7 +9,8 @@ import Section from "@/components/Section";
 import ImageGallery from "@/components/ImageGallery";
 import UsageGuide from "@/components/UsageGuide";
 import SpecsTable from "@/components/SpecsTable";
-import RichSection from "@/components/RichSection";
+import Accordion from "@/components/Accordion";
+import SectionBody from "@/components/SectionBody";
 import Link from "next/link";
 import { ArrowLeft, ChevronLeft, ChevronRight, Info } from "lucide-react";
 
@@ -21,6 +23,19 @@ export default function ProductPage() {
   const currentIndex = products.findIndex((p) => p.slug === slug);
   const prev = currentIndex > 0 ? products[currentIndex - 1] : null;
   const next = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
+
+  useEffect(() => {
+    if (product) {
+      fetch("/api/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productSlug: product.slug,
+          productName: product.name,
+        }),
+      }).catch(() => {});
+    }
+  }, [product]);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -92,9 +107,12 @@ export default function ProductPage() {
               More Information
             </h2>
           </div>
-          {product.sections.map((section, i) => (
-            <RichSection key={i} section={section} index={i} />
-          ))}
+          <Accordion
+            items={product.sections.map((s) => ({
+              title: s.title,
+              content: <SectionBody section={s} />,
+            }))}
+          />
         </div>
       )}
 

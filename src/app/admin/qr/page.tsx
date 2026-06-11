@@ -1,23 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import QRCodeStyling from "qr-code-styling";
+import Link from "next/link";
+import { LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
+import { checkAuth } from "@/lib/admin-auth";
 
 const BASE_URL = "https://kharisfoods.vankharis.com";
 
 export default function AdminQRPage() {
+  const router = useRouter();
   const [baseUrl, setBaseUrl] = useState(BASE_URL);
 
   useEffect(() => {
+    if (!checkAuth()) {
+      router.replace("/admin");
+      return;
+    }
     if (
       window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1"
     ) {
       setBaseUrl(`http://localhost:${window.location.port}`);
     }
-  }, []);
+  }, [router]);
 
   return (
     <div className="min-h-dvh bg-gray-50">
@@ -29,9 +38,15 @@ export default function AdminQRPage() {
               alt="Kharis Foods"
               className="h-6 w-auto"
             />
-            <h1 className="font-bold text-gray-800 text-sm">QR Code Generator</h1>
+            <h1 className="font-bold text-gray-800 text-sm">QR Codes</h1>
           </div>
-          <span className="text-xs text-gray-400">Internal Use</span>
+          <Link
+            href="/admin"
+            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <LayoutDashboard className="size-3.5" />
+            Dashboard
+          </Link>
         </div>
       </header>
 
