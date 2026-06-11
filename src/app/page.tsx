@@ -27,7 +27,7 @@ export default function HomePage() {
 
       <div className="min-h-dvh">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-white/95 dark:bg-kharis-green-800/95 backdrop-blur-sm border-b border-kharis-green-100 dark:border-kharis-green-700">
+        <header className="sticky top-0 z-40 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-sm border-b border-kharis-green-100 dark:border-neutral-800">
           <div className="flex items-center justify-between px-5 h-14">
             <div className="flex items-center gap-2">
               <img
@@ -35,10 +35,10 @@ export default function HomePage() {
                 alt="Kharis Foods"
                 className="h-9 w-auto"
               />
-              <span className="font-bold text-kharis-green-800 dark:text-kharis-green-100 text-sm">Kharis Foods</span>
+              <span className="font-bold text-kharis-green-800 dark:text-neutral-100 text-sm">Kharis Foods</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-xs text-kharis-green-500 dark:text-kharis-green-400 font-medium">Product Guide</span>
+              <span className="text-xs text-kharis-green-500 dark:text-neutral-400 font-medium">Product Guide</span>
               <ThemeToggle />
             </div>
           </div>
@@ -46,10 +46,10 @@ export default function HomePage() {
 
         {/* Intro */}
         <section className="px-5 pt-6 pb-4">
-          <h1 className="text-2xl font-extrabold text-kharis-green-800 dark:text-kharis-green-100 leading-tight">
+          <h1 className="text-2xl font-extrabold text-kharis-green-800 dark:text-neutral-100 leading-tight">
             Our Products
           </h1>
-          <p className="mt-1.5 text-sm text-kharis-green-500 dark:text-kharis-green-400 max-w-xs">
+          <p className="mt-1.5 text-sm text-kharis-green-500 dark:text-neutral-400 max-w-xs">
             Scan the QR code on your product bag for detailed usage instructions.
           </p>
         </section>
@@ -64,17 +64,17 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-kharis-green-700 text-center">
-          <p className="text-xs text-kharis-green-400 dark:text-kharis-green-500">
+        <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-neutral-800 text-center">
+          <p className="text-xs text-kharis-green-400 dark:text-neutral-500">
             &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
           </p>
-          <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-kharis-green-300">
+          <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-300">
             Member of{" "}
             <a
               href="https://vankharis.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline underline-offset-2 hover:text-kharis-green-800 dark:hover:text-kharis-green-100 transition-colors"
+              className="underline underline-offset-2 hover:text-kharis-green-800 dark:hover:text-neutral-100 transition-colors"
             >
               Vankharis Limited
             </a>

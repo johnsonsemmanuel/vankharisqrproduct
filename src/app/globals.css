@@ -47,7 +47,7 @@ html {
 }
 
 body {
-  @apply bg-white text-kharis-green-900 antialiased dark:bg-kharis-green-900 dark:text-kharis-green-100;
+  @apply bg-white text-kharis-green-900 antialiased dark:bg-neutral-950 dark:text-neutral-100;
 }
 
 ::selection {

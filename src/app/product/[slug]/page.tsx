@@ -66,11 +66,11 @@ export default function ProductPage() {
         transition={{ duration: 0.3 }}
       >
       {/* Back navigation */}
-      <div className="sticky top-0 z-40 bg-white/95 dark:bg-kharis-green-800/95 backdrop-blur-sm border-b border-kharis-green-100 dark:border-kharis-green-700">
+      <div className="sticky top-0 z-40 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-sm border-b border-kharis-green-100 dark:border-neutral-800">
         <div className="flex items-center justify-between px-4 h-12">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-sm font-medium text-kharis-green-600 dark:text-kharis-green-300 active:text-kharis-green-800 dark:active:text-kharis-green-100 transition-colors"
+            className="flex items-center gap-1.5 text-sm font-medium text-kharis-green-600 dark:text-neutral-300 active:text-kharis-green-800 dark:active:text-neutral-100 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             All Products
@@ -84,7 +84,7 @@ export default function ProductPage() {
 
       {/* Product Description */}
       <Section title="Description">
-        <p className="text-sm text-kharis-green-700 dark:text-kharis-green-300 leading-relaxed">
+        <p className="text-sm text-kharis-green-700 dark:text-neutral-300 leading-relaxed">
           {product.description}
         </p>
       </Section>
@@ -110,9 +110,9 @@ export default function ProductPage() {
 
       {/* Rich Sections */}
       {product.sections && product.sections.length > 0 && (
-        <div className="border-t border-kharis-green-100 dark:border-kharis-green-700">
+        <div className="border-t border-kharis-green-100 dark:border-neutral-800">
           <div className="px-5 pt-6 pb-2">
-            <h2 className="text-lg font-bold text-kharis-green-800 dark:text-kharis-green-100 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-kharis-green-800 dark:text-neutral-100 flex items-center gap-2">
               <span className="w-1.5 h-6 bg-kharis-gold-500 rounded-full inline-block shrink-0" />
               <Info className="w-4 h-4 text-kharis-gold-500 shrink-0" />
               More Information
@@ -132,13 +132,13 @@ export default function ProductPage() {
         {prev ? (
           <Link
             href={`/product/${prev.slug}`}
-            className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200 dark:border-kharis-green-700
-              active:bg-kharis-green-50 dark:active:bg-kharis-green-800 transition-colors"
+            className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200 dark:border-neutral-800
+              active:bg-kharis-green-50 dark:active:bg-neutral-900 transition-colors"
           >
-            <ChevronLeft className="w-4 h-4 text-kharis-green-500 dark:text-kharis-green-400 shrink-0" />
+            <ChevronLeft className="w-4 h-4 text-kharis-green-500 dark:text-neutral-400 shrink-0" />
             <div className="min-w-0">
-              <div className="text-xs text-kharis-green-500 dark:text-kharis-green-400">Previous</div>
-              <div className="text-sm font-bold text-kharis-green-800 dark:text-kharis-green-100 truncate">{prev.name}</div>
+              <div className="text-xs text-kharis-green-500 dark:text-neutral-400">Previous</div>
+              <div className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100 truncate">{prev.name}</div>
             </div>
           </Link>
         ) : (
@@ -147,14 +147,14 @@ export default function ProductPage() {
         {next ? (
           <Link
             href={`/product/${next.slug}`}
-            className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200 dark:border-kharis-green-700
-              active:bg-kharis-green-50 dark:active:bg-kharis-green-800 transition-colors text-right"
+            className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl border border-kharis-green-200 dark:border-neutral-800
+              active:bg-kharis-green-50 dark:active:bg-neutral-900 transition-colors text-right"
           >
             <div className="min-w-0 flex-1">
-              <div className="text-xs text-kharis-green-500 dark:text-kharis-green-400">Next</div>
-              <div className="text-sm font-bold text-kharis-green-800 dark:text-kharis-green-100 truncate">{next.name}</div>
+              <div className="text-xs text-kharis-green-500 dark:text-neutral-400">Next</div>
+              <div className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100 truncate">{next.name}</div>
             </div>
-            <ChevronRight className="w-4 h-4 text-kharis-green-500 dark:text-kharis-green-400 shrink-0" />
+            <ChevronRight className="w-4 h-4 text-kharis-green-500 dark:text-neutral-400 shrink-0" />
           </Link>
         ) : (
           <div className="flex-1" />
@@ -162,17 +162,17 @@ export default function ProductPage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-kharis-green-700 text-center">
-        <p className="text-xs text-kharis-green-400 dark:text-kharis-green-500">
+      <footer className="px-5 py-6 border-t border-kharis-green-100 dark:border-neutral-800 text-center">
+        <p className="text-xs text-kharis-green-400 dark:text-neutral-500">
           &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
         </p>
-        <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-kharis-green-300">
+        <p className="mt-1 text-xs font-semibold text-kharis-green-600 dark:text-neutral-300">
           Member of{" "}
           <a
             href="https://vankharis.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-kharis-green-800 dark:hover:text-kharis-green-100 transition-colors"
+            className="underline underline-offset-2 hover:text-kharis-green-800 dark:hover:text-neutral-100 transition-colors"
           >
             Vankharis Limited
           </a>

@@ -35,7 +35,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-dvh">
         <ThemeProvider>
-          <main className="mx-auto max-w-lg min-h-dvh bg-white dark:bg-kharis-green-900 shadow-sm dark:shadow-kharis-green-800/20">
+          <main className="mx-auto max-w-lg min-h-dvh bg-white dark:bg-neutral-950 shadow-sm dark:shadow-black/30">
             {children}
           </main>
         </ThemeProvider>
