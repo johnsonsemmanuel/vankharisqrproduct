@@ -2,11 +2,11 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
-  tagline: string;
+  tagline?: string;
   description: string;
   images: string[];
   usageGuide: UsageStep[];
-  specs: Record<string, string>;
+  specs?: Record<string, string>;
   category: string;
   sections?: RichSection[];
 }
@@ -41,7 +41,7 @@ export interface UsageStep {
 export interface ProductCardData {
   slug: string;
   name: string;
-  tagline: string;
+  tagline?: string;
   image: string;
   category: string;
 }

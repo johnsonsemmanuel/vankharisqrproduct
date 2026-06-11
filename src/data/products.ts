@@ -189,7 +189,6 @@ export const products: Product[] = [
     id: "5",
     slug: "maize-grits",
     name: "Maize Grits",
-    tagline: "Easy breakfast porridge — hearty, wholesome, and naturally gluten-free",
     description:
       "Maize Grits provide energy-rich carbohydrates and can be enjoyed with milk, groundnuts, honey, or fresh fruits for added nutrition and taste.",
     images: [
@@ -234,12 +233,6 @@ export const products: Product[] = [
           "Serve hot at a minimum temperature of 65°C. Enjoy with milk, sugar, honey, butter, peanut paste, or fresh fruits.",
       },
     ],
-    specs: {
-      "Shelf Life": "12 months",
-      Storage: "Cool, dry place away from direct sunlight",
-      "Gluten Free": "Yes — naturally gluten-free",
-      Ingredients: "100% maize",
-    },
     category: "Grains & Tubers",
     sections: [
       {
@@ -277,7 +270,6 @@ export const products: Product[] = [
     id: "6",
     slug: "whole-grain-corn-flour",
     name: "Whole Grain Corn Flour",
-    tagline: "Wholesome whole grain — naturally rich in fiber, vitamins, and minerals",
     description:
       "Whole Grain Corn Flour is produced from carefully selected whole maize grains and contains the bran, germ, and endosperm, providing natural fiber, vitamins, and minerals for healthy nutrition.",
     images: [
@@ -312,17 +304,17 @@ export const products: Product[] = [
       },
       {
         step: 5,
+        title: "Sprinkle Water if Needed",
+        description:
+          "Sprinkle small amounts of water around the edges if the banku becomes too thick during cooking.",
+      },
+      {
+        step: 6,
         title: "Mold and Serve",
         description:
           "Mold into round portions using a bowl or calabash. Serve hot with soup, stew, okro, pepper sauce, fish, or meat.",
       },
     ],
-    specs: {
-      "Shelf Life": "12 months",
-      Storage: "Cool, dry place away from moisture",
-      "Gluten Free": "Yes — naturally gluten-free",
-      Ingredients: "100% whole maize",
-    },
     category: "Flours & Meals",
     sections: [
       {

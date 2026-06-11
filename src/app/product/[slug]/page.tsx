@@ -65,9 +65,11 @@ export default function ProductPage() {
       </Section>
 
       {/* Specs */}
-      <Section title="Specifications" delay={0.3}>
-        <SpecsTable specs={product.specs} />
-      </Section>
+      {product.specs && Object.keys(product.specs).length > 0 && (
+        <Section title="Specifications" delay={0.3}>
+          <SpecsTable specs={product.specs} />
+        </Section>
+      )}
 
       {/* Rich Sections */}
       {product.sections && product.sections.length > 0 && (

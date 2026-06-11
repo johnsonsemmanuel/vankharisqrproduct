@@ -28,9 +28,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         <h3 className="mt-1 text-lg font-bold text-kharis-green-900 leading-tight">
           {product.name}
         </h3>
-        <p className="mt-1 text-sm text-kharis-green-600 line-clamp-2">
-          {product.tagline}
-        </p>
+        {product.tagline && (
+          <p className="mt-1 text-sm text-kharis-green-600 line-clamp-2">
+            {product.tagline}
+          </p>
+        )}
         <div className="mt-3 flex items-center gap-1 text-kharis-gold-600 text-sm font-semibold">
           <span>View product</span>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
