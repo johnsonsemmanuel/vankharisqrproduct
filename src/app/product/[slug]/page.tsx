@@ -33,15 +33,15 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (product) {
-      fetch("/api/track", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productSlug: product.slug,
-          productName: product.name,
-        }),
-        keepalive: true,
-      }).catch(() => {});
+      try {
+        navigator.sendBeacon(
+          "/api/track",
+          JSON.stringify({
+            productSlug: product.slug,
+            productName: product.name,
+          })
+        );
+      } catch {}
     }
   }, [product]);
 
