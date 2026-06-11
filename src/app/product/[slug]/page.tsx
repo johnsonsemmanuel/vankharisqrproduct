@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, notFound } from "next/navigation";
-import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { products } from "@/data/products";
 import ProductHero from "@/components/ProductHero";
 import Section from "@/components/Section";
@@ -12,7 +12,8 @@ import SpecsTable from "@/components/SpecsTable";
 import Accordion from "@/components/Accordion";
 import SectionBody from "@/components/SectionBody";
 import Link from "next/link";
-import { ArrowLeft, ChevronLeft, ChevronRight, Info, X } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { useToasts } from "@/lib/use-toasts";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -20,11 +21,10 @@ export default function ProductPage() {
 
   if (!product) notFound();
 
-  const [showWelcome, setShowWelcome] = useState(true);
+  const { message } = useToasts();
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowWelcome(false), 4000);
-    return () => clearTimeout(timer);
+    message({ text: "Welcome, valued customer!" });
   }, []);
 
   const currentIndex = products.findIndex((p) => p.slug === slug);
@@ -58,30 +58,6 @@ export default function ProductPage() {
         className="fixed top-0 left-0 right-0 z-50 h-1 origin-left bg-kharis-gold-500"
         style={{ scaleX }}
       />
-
-      <AnimatePresence>
-        {showWelcome && (
-          <motion.div
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -60, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="fixed top-1 left-4 right-4 z-50 max-w-lg mx-auto"
-          >
-            <div className="bg-kharis-green-700 text-white px-4 py-3 rounded-xl shadow-lg flex items-center justify-between gap-3">
-              <p className="text-sm font-medium">
-                Welcome, valued customer!
-              </p>
-              <button
-                onClick={() => setShowWelcome(false)}
-                className="p-0.5 hover:bg-white/20 rounded-lg transition-colors shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <motion.div
         initial={{ opacity: 0 }}
