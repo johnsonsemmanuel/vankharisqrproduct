@@ -8,9 +8,9 @@ export const products: Product[] = [
     description:
       "Maize Grits provide energy-rich carbohydrates and can be enjoyed with milk, groundnuts, honey, or fresh fruits for added nutrition and taste.",
     images: [
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
+      "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=800&q=80",
+      "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80",
+      "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=800&q=80",
     ],
     usageGuide: [
       {
@@ -89,9 +89,9 @@ export const products: Product[] = [
     description:
       "Whole Grain Corn Flour is produced from carefully selected whole maize grains and contains the bran, germ, and endosperm, providing natural fiber, vitamins, and minerals for healthy nutrition.",
     images: [
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
-      "https://images.unsplash.com/photo-1590779033100-9f8a05a7a2c5?w=800&q=80",
+      "https://images.unsplash.com/photo-1558968363-005b66c7b0c8?w=800&q=80",
+      "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80",
+      "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=800&q=80",
     ],
     usageGuide: [
       {

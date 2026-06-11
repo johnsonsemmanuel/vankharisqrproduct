@@ -29,9 +29,11 @@ export default function HomePage() {
         <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-kharis-green-100">
           <div className="flex items-center justify-between px-5 h-14">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-kharis-green-800 flex items-center justify-center">
-                <span className="text-kharis-gold-400 text-xs font-extrabold">K</span>
-              </div>
+              <img
+                src="/images/kharisfoods-removebg-preview.png"
+                alt="Kharis Foods"
+                className="h-7 w-auto"
+              />
               <span className="font-bold text-kharis-green-800 text-sm">Kharis Foods</span>
             </div>
             <span className="text-xs text-kharis-green-500 font-medium">Product Guide</span>
