@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
+import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
 
 const BASE_URL = "https://kharisfoods.vankharis.com";
@@ -141,9 +142,11 @@ function ProductQRCard({
           <span className="text-sm font-medium text-gray-700 truncate mr-2">
             {productUrl}
           </span>
-          <button
+          <Button
             onClick={handleCopy}
-            className="shrink-0 size-7 flex items-center justify-center rounded-md hover:bg-gray-200 transition-colors"
+            variant="ghost"
+            size="icon"
+            className="size-7"
             title="Copy URL"
           >
             {copied ? (
@@ -156,7 +159,7 @@ function ProductQRCard({
                 <path d="M17 9c-.003-2.957-.047-4.489-.908-5.538a4 4 0 0 0-.554-.554C14.43 2 12.788 2 9.5 2c-3.287 0-4.931 0-6.038.908a4 4 0 0 0-.554.554C2 4.57 2 6.212 2 9.5c0 3.287 0 4.931.908 6.038a4 4 0 0 0 .554.554c1.05.86 2.58.906 5.538.908" />
               </svg>
             )}
-          </button>
+          </Button>
         </div>
 
         <div className="flex w-full gap-3">

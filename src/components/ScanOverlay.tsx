@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function ScanOverlay({ onDone }: { onDone: () => void }) {
   return (
@@ -29,14 +29,14 @@ export default function ScanOverlay({ onDone }: { onDone: () => void }) {
         <p className="text-kharis-green-200 text-sm max-w-xs mx-auto">
           Scan the QR code on your product bag to view usage instructions and product details.
         </p>
-        <motion.button
-          whileTap={{ scale: 0.95 }}
+        <Button
           onClick={onDone}
-          className="mt-8 px-8 py-3 bg-kharis-gold-500 text-kharis-green-900 font-bold rounded-full text-sm
-            active:bg-kharis-gold-600 transition-colors"
+          variant="secondary"
+          size="lg"
+          className="mt-8 rounded-full font-bold"
         >
           Browse Products
-        </motion.button>
+        </Button>
       </motion.div>
 
       {/* Animated scan line */}
