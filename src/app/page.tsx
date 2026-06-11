@@ -62,6 +62,9 @@ export default function HomePage() {
           <p className="text-xs text-kharis-green-400">
             &copy; {new Date().getFullYear()} Kharis Foods. All rights reserved.
           </p>
+          <p className="mt-1 text-xs font-semibold text-kharis-green-600">
+            Member of Vankharis Limited
+          </p>
         </footer>
       </div>
     </>
