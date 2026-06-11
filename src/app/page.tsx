@@ -32,7 +32,7 @@ export default function HomePage() {
               <img
                 src="/images/kharisfoods-removebg-preview.png"
                 alt="Kharis Foods"
-                className="h-7 w-auto"
+                className="h-9 w-auto"
               />
               <span className="font-bold text-kharis-green-800 text-sm">Kharis Foods</span>
             </div>

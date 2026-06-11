@@ -21,7 +21,7 @@ export default function ScanOverlay({ onDone }: { onDone: () => void }) {
         <img
           src="/images/kharisfoods-removebg-preview.png"
           alt="Kharis Foods"
-          className="h-20 w-auto mx-auto mb-4"
+          className="h-24 w-auto mx-auto mb-4"
         />
         <h1 className="text-3xl font-extrabold text-white mb-2">
           Kharis Foods
