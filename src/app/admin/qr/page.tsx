@@ -1,14 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import QRCode from "qrcode";
+import { useEffect, useRef, useState } from "react";
+import QRCodeStyling from "qr-code-styling";
 import { products } from "@/data/products";
 
+const BASE_URL = "https://kharisfoods.vankharis.com";
+
 export default function AdminQRPage() {
-  const [baseUrl, setBaseUrl] = useState("https://kharisfoods.vankharis.com");
+  const [baseUrl, setBaseUrl] = useState(BASE_URL);
 
   useEffect(() => {
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    if (
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+    ) {
       setBaseUrl(`http://localhost:${window.location.port}`);
     }
   }, []);
@@ -17,7 +22,14 @@ export default function AdminQRPage() {
     <div className="min-h-dvh bg-gray-50">
       <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between px-5 h-14 max-w-lg mx-auto">
-          <h1 className="font-bold text-gray-800 text-sm">QR Code Generator</h1>
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/kharisfoods-removebg-preview.png"
+              alt="Kharis Foods"
+              className="h-6 w-auto"
+            />
+            <h1 className="font-bold text-gray-800 text-sm">QR Code Generator</h1>
+          </div>
           <span className="text-xs text-gray-400">Internal Use</span>
         </div>
       </header>
@@ -42,47 +54,136 @@ function ProductQRCard({
   product: (typeof products)[number];
   baseUrl: string;
 }) {
-  const [qrDataUrl, setQrDataUrl] = useState("");
+  const qrRef = useRef<HTMLDivElement>(null);
+  const qrInstance = useRef<QRCodeStyling | null>(null);
+  const [copied, setCopied] = useState(false);
   const productUrl = `${baseUrl}/product/${product.slug}`;
 
   useEffect(() => {
-    if (!baseUrl) return;
-    QRCode.toDataURL(productUrl, {
-      width: 400,
-      margin: 2,
-      color: { dark: "#1b5e20", light: "#ffffff" },
-    }).then(setQrDataUrl);
-  }, [baseUrl, productUrl]);
+    if (!qrRef.current) return;
+
+    qrRef.current.innerHTML = "";
+
+    qrInstance.current = new QRCodeStyling({
+      width: 180,
+      height: 180,
+      data: productUrl,
+      type: "svg",
+      image: "/images/kharisfoods-removebg-preview.png",
+      imageOptions: {
+        crossOrigin: "anonymous",
+        margin: 6,
+        imageSize: 0.4,
+      },
+      dotsOptions: {
+        color: "#1b5e20",
+        type: "rounded",
+      },
+      cornersSquareOptions: {
+        color: "#1b5e20",
+        type: "extra-rounded",
+      },
+      cornersDotOptions: {
+        color: "#1b5e20",
+        type: "dot",
+      },
+      backgroundOptions: {
+        color: "transparent",
+      },
+    });
+
+    qrInstance.current.append(qrRef.current);
+  }, [productUrl]);
+
+  const handleDownloadSVG = () => {
+    qrInstance.current?.download({
+      name: `qr-${product.slug}`,
+      extension: "svg",
+    });
+  };
+
+  const handleDownloadPNG = () => {
+    qrInstance.current?.download({
+      name: `qr-${product.slug}`,
+      extension: "png",
+    });
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(productUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // fallback
+    }
+  };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
-      <div className="flex items-start gap-4">
-        <div className="shrink-0">
-          {qrDataUrl ? (
-            <img
-              src={qrDataUrl}
-              alt={`QR code for ${product.name}`}
-              className="w-28 h-28"
-            />
-          ) : (
-            <div className="w-28 h-28 bg-gray-100 rounded-lg" />
-          )}
-        </div>
-        <div className="min-w-0 flex-1">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="p-5 flex flex-col items-center gap-5">
+        <div className="text-center">
           <h2 className="text-base font-bold text-gray-800">{product.name}</h2>
           <p className="text-xs text-gray-500 mt-0.5 break-all">{productUrl}</p>
-          {qrDataUrl && (
-            <a
-              href={qrDataUrl}
-              download={`qr-${product.slug}.png`}
-              className="inline-flex items-center gap-1 mt-3 px-3 py-1.5 bg-kharis-green-700 text-white text-xs font-semibold rounded-lg hover:bg-kharis-green-800 transition-colors"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </div>
+
+        <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 py-6 px-8 w-full">
+          <div className="relative p-0.5">
+            <div ref={qrRef} />
+            <div className="absolute top-0 left-0 size-3 rounded-tl border-t-2 border-l-2 border-kharis-green-700" />
+            <div className="absolute top-0 right-0 size-3 rotate-90 rounded-tl border-t-2 border-l-2 border-kharis-green-700" />
+            <div className="absolute bottom-0 left-0 size-3 -rotate-90 rounded-tl border-t-2 border-l-2 border-kharis-green-700" />
+            <div className="absolute right-0 bottom-0 size-3 rotate-180 rounded-tl border-t-2 border-l-2 border-kharis-green-700" />
+          </div>
+        </div>
+
+        <div className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
+          <span className="text-sm font-medium text-gray-700 truncate mr-2">
+            {productUrl}
+          </span>
+          <button
+            onClick={handleCopy}
+            className="shrink-0 size-7 flex items-center justify-center rounded-md hover:bg-gray-200 transition-colors"
+            title="Copy URL"
+          >
+            {copied ? (
+              <svg className="size-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              Download PNG
-            </a>
-          )}
+            ) : (
+              <svg className="size-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15c0-2.828 0-4.243.879-5.121C10.757 9 12.172 9 15 9h1c2.828 0 4.243 0 5.121.879C22 10.757 22 12.172 22 15v1c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22h-1c-2.828 0-4.243 0-5.121-.879C9 20.243 9 18.828 9 16z" />
+                <path d="M17 9c-.003-2.957-.047-4.489-.908-5.538a4 4 0 0 0-.554-.554C14.43 2 12.788 2 9.5 2c-3.287 0-4.931 0-6.038.908a4 4 0 0 0-.554.554C2 4.57 2 6.212 2 9.5c0 3.287 0 4.931.908 6.038a4 4 0 0 0 .554.554c1.05.86 2.58.906 5.538.908" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        <div className="flex w-full gap-3">
+          <button
+            onClick={handleDownloadSVG}
+            className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-4 py-3 hover:bg-gray-50 transition-colors"
+          >
+            <svg className="size-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 11l5 5 5-5M12 4v12" />
+            </svg>
+            <div className="text-left">
+              <p className="text-sm font-semibold text-gray-800">SVG</p>
+              <p className="text-xs text-gray-400">Scalable</p>
+            </div>
+          </button>
+          <button
+            onClick={handleDownloadPNG}
+            className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-4 py-3 hover:bg-gray-50 transition-colors"
+          >
+            <svg className="size-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 11l5 5 5-5M12 4v12" />
+            </svg>
+            <div className="text-left">
+              <p className="text-sm font-semibold text-gray-800">PNG</p>
+              <p className="text-xs text-gray-400">High-res</p>
+            </div>
+          </button>
         </div>
       </div>
     </div>
