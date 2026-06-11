@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { QrCode, BarChart3, ShieldAlert, LogIn, LogOut, ChevronRight } from "lucide-react";
+import { QrCode, BarChart3, ShieldAlert, LogIn, LogOut, ChevronRight, Eye, EyeOff } from "lucide-react";
 import { checkAuth, login, logout } from "@/lib/admin-auth";
 import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -46,16 +47,26 @@ export default function AdminPage() {
               onSubmit={(e) => { e.preventDefault(); handleLogin(); }}
               className="space-y-4"
             >
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(false); }}
-                placeholder="Password"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm
-                  focus:outline-none focus:ring-2 focus:ring-kharis-green-500/30 focus:border-kharis-green-500
-                  placeholder:text-gray-400"
-                autoFocus
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(false); }}
+                  placeholder="Password"
+                  className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 text-sm
+                    focus:outline-none focus:ring-2 focus:ring-kharis-green-500/30 focus:border-kharis-green-500
+                    placeholder:text-gray-400"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {error && (
                 <p className="text-xs text-red-500 text-center">Incorrect password.</p>
               )}

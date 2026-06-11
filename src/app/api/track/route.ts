@@ -56,7 +56,8 @@ export async function POST(request: NextRequest) {
     addRecord(record);
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("Track API error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

@@ -8,7 +8,7 @@ interface StoreData {
 
 const DATA_DIR =
   process.env.NODE_ENV === "production"
-    ? path.join(process.cwd(), ".data")
+    ? "/tmp/kharis-analytics"
     : path.join(process.cwd(), ".data");
 
 const ANALYTICS_FILE = path.join(DATA_DIR, "analytics.json");
