@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kharis-green-50: #e8f5e9;
+  --color-kharis-green-100: #c8e6c9;
+  --color-kharis-green-200: #a5d6a7;
+  --color-kharis-green-300: #81c784;
+  --color-kharis-green-400: #66bb6a;
+  --color-kharis-green-500: #4caf50;
+  --color-kharis-green-600: #388e3c;
+  --color-kharis-green-700: #2e7d32;
+  --color-kharis-green-800: #1b5e20;
+  --color-kharis-green-900: #0d3b0f;
+
+  --color-kharis-gold-50: #fff8e1;
+  --color-kharis-gold-100: #ffecb3;
+  --color-kharis-gold-200: #ffe082;
+  --color-kharis-gold-300: #ffd54f;
+  --color-kharis-gold-400: #ffca28;
+  --color-kharis-gold-500: #ffc107;
+  --color-kharis-gold-600: #d4a843;
+  --color-kharis-gold-700: #c8a951;
+  --color-kharis-gold-800: #b8860b;
+  --color-kharis-gold-900: #8d6e00;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply bg-white text-kharis-green-900 antialiased;
+}
+
+::selection {
+  @apply bg-kharis-green-200 text-kharis-green-900;
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.kharis.green.200") transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme("colors.kharis.green.200");
+    border-radius: 3px;
+  }
+}
