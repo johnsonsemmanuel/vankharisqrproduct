@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import QRCodeStyling from "qr-code-styling";
 import Link from "next/link";
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { products } from "@/data/products";
 import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
@@ -83,6 +83,17 @@ function ProductQRCard({
   const qrInstance = useRef<QRCodeStyling | null>(null);
   const [copied, setCopied] = useState(false);
   const [batchCode, setBatchCode] = useState("");
+
+  const generateBadgeCode = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const start = new Date(now.getFullYear(), 0, 1);
+    const diff = now.getTime() - start.getTime();
+    const week = Math.ceil((diff / 86400000 + start.getDay() + 1) / 7);
+    const weekStr = String(week).padStart(2, "0");
+    const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+    setBatchCode(`KF-${year}-W${weekStr}-${rand}`);
+  };
   const productUrl = batchCode
     ? `${baseUrl}/product/${product.slug}?batch=${batchCode.trim()}`
     : `${baseUrl}/product/${product.slug}`;
@@ -153,16 +164,29 @@ function ProductQRCard({
         <div className="text-center w-full">
           <h2 className="text-base font-bold text-gray-800 dark:text-neutral-100">{product.name}</h2>
           <div className="mt-3 max-w-xs mx-auto">
-            <label className="block text-[10px] font-bold text-gray-500 dark:text-neutral-400 uppercase tracking-wider text-left mb-1">
-              Batch Code (adds Authenticity Verification)
-            </label>
-            <input
-              type="text"
-              value={batchCode}
-              onChange={(e) => setBatchCode(e.target.value)}
-              placeholder="e.g. KF-2026-06"
-              className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-neutral-850 bg-white dark:bg-neutral-950 text-xs text-neutral-700 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-kharis-green-500/50 focus:border-kharis-green-500"
-            />
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-[10px] font-bold text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                Batch Code
+              </label>
+              <span className="text-[9px] text-gray-400 dark:text-neutral-500">Adds authenticity badge on scan</span>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={batchCode}
+                onChange={(e) => setBatchCode(e.target.value)}
+                placeholder="e.g. KF-2026-W25-A7F3"
+                className="flex-1 min-w-0 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-neutral-850 bg-white dark:bg-neutral-950 text-xs text-neutral-700 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-kharis-green-500/50 focus:border-kharis-green-500"
+              />
+              <button
+                onClick={generateBadgeCode}
+                className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-kharis-green-200 dark:border-neutral-800 bg-kharis-green-50 dark:bg-neutral-900 text-xs font-semibold text-kharis-green-700 dark:text-neutral-200 hover:bg-kharis-green-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                title="Generate new weekly badge code"
+              >
+                <RefreshCw className="size-3" />
+                Generate
+              </button>
+            </div>
           </div>
         </div>
 
