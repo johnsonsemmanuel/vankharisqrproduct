@@ -21,7 +21,6 @@ function ensureDir() {
 }
 
 function readStore(): { events: ScanRecord[]; feedback: FeedbackRecord[] } {
-  if (kv) return { events: [], feedback: [] };
   try {
     ensureDir();
     if (fs.existsSync(ANALYTICS_FILE)) {
@@ -39,46 +38,90 @@ function readStore(): { events: ScanRecord[]; feedback: FeedbackRecord[] } {
 }
 
 function writeStore(data: { events: ScanRecord[]; feedback: FeedbackRecord[] }) {
-  if (kv) return;
-  ensureDir();
-  fs.writeFileSync(ANALYTICS_FILE, JSON.stringify(data), "utf-8");
+  try {
+    ensureDir();
+    fs.writeFileSync(ANALYTICS_FILE, JSON.stringify(data), "utf-8");
+  } catch {
+    // write failed (e.g. readonly fs on serverless)
+  }
+}
+
+async function redisLength(key: string): Promise<number> {
+  if (!kv) return 0;
+  try {
+    return await kv.llen(key);
+  } catch {
+    return 0;
+  }
+}
+
+async function redisPush(key: string, value: string): Promise<void> {
+  if (!kv) return;
+  await kv.lpush(key, value);
+}
+
+async function redisRange(key: string): Promise<string[]> {
+  if (!kv) return [];
+  try {
+    const result = await kv.lrange(key, 0, -1);
+    return Array.isArray(result) ? result : [];
+  } catch (e) {
+    console.error(`Redis LRANGE error on ${key}:`, e);
+    return [];
+  }
 }
 
 export async function addRecord(record: ScanRecord): Promise<void> {
-  if (kv) {
-    await kv.lpush(KV_EVENTS, JSON.stringify(record));
-    return;
+  try {
+    if (kv) {
+      await redisPush(KV_EVENTS, JSON.stringify(record));
+      return;
+    }
+    const store = readStore();
+    store.events.push(record);
+    writeStore(store);
+  } catch (e) {
+    console.error("addRecord error:", e);
   }
-  const store = readStore();
-  store.events.push(record);
-  writeStore(store);
 }
 
 export async function addFeedback(record: FeedbackRecord): Promise<void> {
-  if (kv) {
-    await kv.lpush(KV_FEEDBACK, JSON.stringify(record));
-    return;
+  try {
+    if (kv) {
+      await redisPush(KV_FEEDBACK, JSON.stringify(record));
+      return;
+    }
+    const store = readStore();
+    store.feedback.push(record);
+    writeStore(store);
+  } catch (e) {
+    console.error("addFeedback error:", e);
   }
-  const store = readStore();
-  store.feedback.push(record);
-  writeStore(store);
 }
 
 export async function getAnalytics(): Promise<AnalyticsSnapshot> {
   let events: ScanRecord[] = [];
   let feedback: FeedbackRecord[] = [];
 
-  if (kv) {
-    const [rawEvents, rawFeedback] = await Promise.all([
-      kv.lrange(KV_EVENTS, 0, -1) as Promise<string[]>,
-      kv.lrange(KV_FEEDBACK, 0, -1) as Promise<string[]>,
-    ]);
-    events = (rawEvents || []).map((s) => JSON.parse(s)).reverse();
-    feedback = (rawFeedback || []).map((s) => JSON.parse(s)).reverse();
-  } else {
-    const store = readStore();
-    events = store.events;
-    feedback = store.feedback;
+  try {
+    if (kv) {
+      const [rawEvents, rawFeedback] = await Promise.all([
+        redisRange(KV_EVENTS),
+        redisRange(KV_FEEDBACK),
+      ]);
+      events = rawEvents.map((s) => {
+        try { return JSON.parse(s); } catch { return null; }
+      }).filter(Boolean) as ScanRecord[];
+      feedback = rawFeedback.map((s) => {
+        try { return JSON.parse(s); } catch { return null; }
+      }).filter(Boolean) as FeedbackRecord[];
+    } else {
+      const store = readStore();
+      events = store.events;
+      feedback = store.feedback;
+    }
+  } catch (e) {
+    console.error("getAnalytics error:", e);
   }
 
   const totalScans = events.length;
@@ -184,17 +227,25 @@ export async function exportAllData(): Promise<{
   let events: ScanRecord[] = [];
   let feedback: FeedbackRecord[] = [];
 
-  if (kv) {
-    const [rawEvents, rawFeedback] = await Promise.all([
-      kv.lrange(KV_EVENTS, 0, -1) as Promise<string[]>,
-      kv.lrange(KV_FEEDBACK, 0, -1) as Promise<string[]>,
-    ]);
-    events = (rawEvents || []).map((s) => JSON.parse(s)).reverse();
-    feedback = (rawFeedback || []).map((s) => JSON.parse(s)).reverse();
-  } else {
-    const store = readStore();
-    events = store.events;
-    feedback = store.feedback;
+  try {
+    if (kv) {
+      const [rawEvents, rawFeedback] = await Promise.all([
+        redisRange(KV_EVENTS),
+        redisRange(KV_FEEDBACK),
+      ]);
+      events = rawEvents.map((s) => {
+        try { return JSON.parse(s); } catch { return null; }
+      }).filter(Boolean) as ScanRecord[];
+      feedback = rawFeedback.map((s) => {
+        try { return JSON.parse(s); } catch { return null; }
+      }).filter(Boolean) as FeedbackRecord[];
+    } else {
+      const store = readStore();
+      events = store.events;
+      feedback = store.feedback;
+    }
+  } catch (e) {
+    console.error("exportAllData error:", e);
   }
 
   return {
@@ -202,4 +253,23 @@ export async function exportAllData(): Promise<{
     feedback,
     generatedAt: new Date().toISOString(),
   };
+}
+
+export async function getStorageInfo(): Promise<{
+  type: "redis" | "filesystem" | "none";
+  events: number;
+  feedback: number;
+}> {
+  if (kv) {
+    const [eventCount, feedbackCount] = await Promise.all([
+      redisLength(KV_EVENTS),
+      redisLength(KV_FEEDBACK),
+    ]);
+    return { type: "redis", events: eventCount, feedback: feedbackCount };
+  }
+  if (process.env.VERCEL) {
+    return { type: "none", events: 0, feedback: 0 };
+  }
+  const store = readStore();
+  return { type: "filesystem", events: store.events.length, feedback: store.feedback.length };
 }
