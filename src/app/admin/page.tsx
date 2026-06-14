@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { QrCode, BarChart3, ShieldAlert, LogIn, LogOut, ChevronRight, Eye, EyeOff } from "lucide-react";
+import { QrCode, BarChart3, MessageSquare, ShieldAlert, LogIn, LogOut, ChevronRight, Eye, EyeOff } from "lucide-react";
 import { checkAuth, login, logout } from "@/lib/admin-auth";
 import { Button } from "@/components/ui/button";
 
@@ -156,6 +156,28 @@ export default function AdminPage() {
               </p>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-500 group-hover:text-kharis-gold-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </Link>
+
+          <Link
+            href="/admin/feedback"
+            className="group flex items-center gap-4 p-5 bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800
+              hover:border-kharis-green-300 dark:hover:border-kharis-green-600 hover:shadow-md hover:-translate-y-0.5
+              active:translate-y-0 active:shadow-sm
+              transition-all duration-200 text-left"
+          >
+            <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center shrink-0
+              group-hover:bg-purple-200 dark:group-hover:bg-purple-900 transition-colors">
+              <MessageSquare className="w-6 h-6 text-purple-700" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-gray-800 dark:text-neutral-100 group-hover:text-kharis-green-700 transition-colors">
+                Feedback
+              </p>
+              <p className="text-xs text-gray-500 dark:text-neutral-300 mt-0.5">
+                View customer ratings and cooking experience comments.
+              </p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-300 dark:text-neutral-500 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0" />
           </Link>
         </div>
       </div>

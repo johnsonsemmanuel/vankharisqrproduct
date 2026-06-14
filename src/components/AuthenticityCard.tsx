@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck, CheckCircle2, AlertTriangle } from "lucide-react";
+import { ShieldCheck, CheckCircle2, AlertTriangle, BadgeCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface AuthenticityCardProps {
@@ -8,7 +8,28 @@ interface AuthenticityCardProps {
 }
 
 export default function AuthenticityCard({ batch }: AuthenticityCardProps) {
-  if (!batch) return null;
+  // If no batch is provided, show a general guide verification banner
+  if (!batch) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mx-5 mt-4 p-3 rounded-xl border bg-kharis-green-50/40 border-kharis-green-100 dark:bg-neutral-900/20 dark:border-neutral-800/50"
+      >
+        <div className="flex items-center gap-2.5">
+          <BadgeCheck className="w-5 h-5 text-kharis-green-700 dark:text-kharis-gold-400 shrink-0" />
+          <div>
+            <h3 className="text-xs font-bold text-kharis-green-800 dark:text-neutral-200">
+              Verified Product Guide
+            </h3>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+              This is the official instructions and cooking guide portal for Kharis Foods.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
 
   const isValidFormat = batch.startsWith("KF-");
 
