@@ -1,0 +1,17 @@
+{
+  "name": "Kharis Foods Product Guide",
+  "short_name": "Kharis Foods",
+  "description": "Scan and view usage instructions and recipes for Kharis Foods products.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1b5e20",
+  "icons": [
+    {
+      "src": "/images/kharisfoods-removebg-preview.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

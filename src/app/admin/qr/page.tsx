@@ -82,7 +82,10 @@ function ProductQRCard({
   const qrRef = useRef<HTMLDivElement>(null);
   const qrInstance = useRef<QRCodeStyling | null>(null);
   const [copied, setCopied] = useState(false);
-  const productUrl = `${baseUrl}/product/${product.slug}`;
+  const [batchCode, setBatchCode] = useState("");
+  const productUrl = batchCode
+    ? `${baseUrl}/product/${product.slug}?batch=${batchCode.trim()}`
+    : `${baseUrl}/product/${product.slug}`;
 
   useEffect(() => {
     if (!qrRef.current) return;
@@ -147,9 +150,20 @@ function ProductQRCard({
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 overflow-hidden">
       <div className="p-5 flex flex-col items-center gap-5">
-        <div className="text-center">
+        <div className="text-center w-full">
           <h2 className="text-base font-bold text-gray-800 dark:text-neutral-100">{product.name}</h2>
-          <p className="text-xs text-gray-500 dark:text-neutral-300 mt-0.5 break-all">{productUrl}</p>
+          <div className="mt-3 max-w-xs mx-auto">
+            <label className="block text-[10px] font-bold text-gray-500 dark:text-neutral-400 uppercase tracking-wider text-left mb-1">
+              Batch Code (adds Authenticity Verification)
+            </label>
+            <input
+              type="text"
+              value={batchCode}
+              onChange={(e) => setBatchCode(e.target.value)}
+              placeholder="e.g. KF-2026-06"
+              className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-neutral-850 bg-white dark:bg-neutral-950 text-xs text-neutral-700 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-kharis-green-500/50 focus:border-kharis-green-500"
+            />
+          </div>
         </div>
 
         <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 dark:border-neutral-800 py-6 px-8 w-full">

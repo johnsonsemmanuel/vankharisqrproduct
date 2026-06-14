@@ -1,3 +1,13 @@
+export interface Recipe {
+  name: string;
+  prepTime?: string;
+  cookTime?: string;
+  servings: number;
+  ingredients: { name: string; amount: number; unit: string }[];
+  steps: string[];
+  image?: string;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -9,6 +19,17 @@ export interface Product {
   specs?: Record<string, string>;
   category: string;
   sections?: RichSection[];
+  recipes?: Recipe[];
+  translations?: {
+    [locale: string]: {
+      name?: string;
+      tagline?: string;
+      description?: string;
+      usageGuide?: UsageStep[];
+      specs?: Record<string, string>;
+      sections?: RichSection[];
+    };
+  };
 }
 
 export type RichSectionType =

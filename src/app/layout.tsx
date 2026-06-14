@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
+import RegisterSW from "@/components/RegisterSW";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     icon: "/images/kharisfoods-removebg-preview.png",
     apple: "/images/kharisfoods-removebg-preview.png",
   },
+  manifest: "/manifest.json",
   openGraph: {
     title: "Kharis Foods — Product Guide",
     description:
@@ -41,6 +43,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={outfit.variable}>
       <body className="min-h-dvh font-sans antialiased">
         <ThemeProvider>
+          <RegisterSW />
           <main className="mx-auto max-w-lg min-h-dvh bg-white dark:bg-neutral-950 shadow-sm dark:shadow-black/30">
             {children}
           </main>

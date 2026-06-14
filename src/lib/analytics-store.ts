@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
-import type { ScanRecord, AnalyticsSnapshot } from "./analytics-types";
+import type { ScanRecord, FeedbackRecord, AnalyticsSnapshot } from "./analytics-types";
 
 interface StoreData {
   events: ScanRecord[];
+  feedback?: FeedbackRecord[];
 }
 
 const DATA_DIR = process.env.VERCEL
@@ -18,17 +19,21 @@ function ensureDir() {
   }
 }
 
-function readStore(): StoreData {
+function readStore(): Required<StoreData> {
   try {
     ensureDir();
     if (fs.existsSync(ANALYTICS_FILE)) {
       const raw = fs.readFileSync(ANALYTICS_FILE, "utf-8");
-      return JSON.parse(raw);
+      const data = JSON.parse(raw);
+      return {
+        events: data.events || [],
+        feedback: data.feedback || [],
+      };
     }
   } catch {
     // corrupted file – reset
   }
-  return { events: [] };
+  return { events: [], feedback: [] };
 }
 
 function writeStore(data: StoreData) {
@@ -42,9 +47,16 @@ export function addRecord(record: ScanRecord): void {
   writeStore(store);
 }
 
+export function addFeedback(record: FeedbackRecord): void {
+  const store = readStore();
+  store.feedback.push(record);
+  writeStore(store);
+}
+
 export function getAnalytics(): AnalyticsSnapshot {
   const store = readStore();
   const events = store.events;
+  const feedback = store.feedback;
 
   const totalScans = events.length;
 
@@ -88,6 +100,45 @@ export function getAnalytics(): AnalyticsSnapshot {
 
   const recentScans = [...events].reverse().slice(0, 50);
 
+  // Compute feedback stats
+  const totalFeedback = feedback.length;
+  const averageRating =
+    totalFeedback > 0
+      ? Number(
+          (
+            feedback.reduce((sum, f) => sum + f.rating, 0) / totalFeedback
+          ).toFixed(1)
+        )
+      : 0;
+
+  const productFeedbackData: Record<
+    string,
+    { name: string; sumRating: number; count: number }
+  > = {};
+
+  for (const f of feedback) {
+    if (!productFeedbackData[f.productSlug]) {
+      productFeedbackData[f.productSlug] = {
+        name: f.productName,
+        sumRating: 0,
+        count: 0,
+      };
+    }
+    productFeedbackData[f.productSlug].sumRating += f.rating;
+    productFeedbackData[f.productSlug].count++;
+  }
+
+  const productFeedbackBreakdown = Object.entries(productFeedbackData).map(
+    ([slug, v]) => ({
+      slug,
+      name: v.name,
+      avgRating: Number((v.sumRating / v.count).toFixed(1)),
+      count: v.count,
+    })
+  );
+
+  const recentFeedback = [...feedback].reverse().slice(0, 50);
+
   return {
     totalScans,
     productBreakdown,
@@ -96,5 +147,9 @@ export function getAnalytics(): AnalyticsSnapshot {
     browserBreakdown,
     osBreakdown,
     recentScans,
+    totalFeedback,
+    averageRating,
+    productFeedbackBreakdown,
+    recentFeedback,
   };
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   BarChart3, Smartphone, Monitor, Tablet, Globe, Clock,
   RefreshCw, TrendingUp, Hash, Package, LayoutDashboard, LogOut,
+  Star, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
@@ -106,7 +107,7 @@ export default function AnalyticsPage() {
         ) : (
           <>
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               <SummaryCard
                 icon={Hash}
                 label="Total Scans"
@@ -131,6 +132,17 @@ export default function AnalyticsPage() {
                     ? new Date(data.recentScans[0].timestamp).toLocaleDateString()
                     : "—"
                 }
+              />
+              <SummaryCard
+                icon={Star}
+                label="Avg Rating"
+                value={data.totalFeedback > 0 ? `${data.averageRating} ★` : "—"}
+                sub={`${data.totalFeedback} reviews`}
+              />
+              <SummaryCard
+                icon={MessageSquare}
+                label="Feedback"
+                value={data.totalFeedback.toLocaleString()}
               />
             </div>
 
@@ -265,6 +277,49 @@ export default function AnalyticsPage() {
               </section>
             </div>
 
+            {/* Consumer Feedback Reviews */}
+            {data.totalFeedback > 0 && (
+              <section className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <Star className="size-4 text-kharis-gold-500 fill-kharis-gold-500" />
+                  <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">
+                    Consumer Feedback & Reviews
+                  </h2>
+                </div>
+                <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
+                  {data.recentFeedback.map((f) => (
+                    <div key={f.id} className="p-3 bg-gray-50 dark:bg-neutral-950 rounded-lg border border-gray-100 dark:border-neutral-800">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-xs font-bold text-gray-800 dark:text-neutral-200">{f.productName}</p>
+                          <div className="flex items-center gap-0.5 mt-0.5">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star
+                                key={s}
+                                className={`w-3 h-3 ${
+                                  s <= f.rating
+                                    ? "fill-kharis-gold-500 text-kharis-gold-500"
+                                    : "text-gray-300 dark:text-neutral-700"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <span className="text-[10px] text-gray-400 dark:text-neutral-400">
+                          {new Date(f.timestamp).toLocaleDateString()}
+                        </span>
+                      </div>
+                      {f.comment && (
+                        <p className="text-xs text-gray-650 dark:text-neutral-350 mt-2 bg-white dark:bg-neutral-900 p-2 rounded border border-gray-100 dark:border-neutral-800/50 italic leading-relaxed">
+                          "{f.comment}"
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Recent Scans */}
             <section className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-5">
               <div className="flex items-center gap-2 mb-4">
@@ -296,7 +351,7 @@ export default function AnalyticsPage() {
                   </thead>
                   <tbody>
                     {data.recentScans.map((s) => (
-                      <tr key={s.id} className="border-b border-gray-50">
+                      <tr key={s.id} className="border-b border-gray-50 dark:border-neutral-850">
                         <td className="py-2.5 pr-3 text-gray-800 dark:text-neutral-100 font-medium">
                           {s.productName}
                         </td>
