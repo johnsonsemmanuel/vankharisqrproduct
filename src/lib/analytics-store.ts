@@ -1,20 +1,15 @@
 import fs from "fs";
 import path from "path";
+import { Redis } from "@upstash/redis";
 import type { ScanRecord, FeedbackRecord, AnalyticsSnapshot } from "./analytics-types";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const ANALYTICS_FILE = path.join(DATA_DIR, "analytics.json");
 
-let kv: typeof import("@vercel/kv").kv | null = null;
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "";
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "";
 
-try {
-  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-    const mod = await import("@vercel/kv");
-    kv = mod.kv;
-  }
-} catch {
-  // KV not available, use filesystem
-}
+const kv = redisUrl && redisToken ? new Redis({ url: redisUrl, token: redisToken }) : null;
 
 const KV_EVENTS = "analytics:events";
 const KV_FEEDBACK = "analytics:feedback";
