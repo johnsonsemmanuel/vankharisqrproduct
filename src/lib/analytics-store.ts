@@ -60,7 +60,7 @@ async function redisPush(key: string, value: string): Promise<void> {
   await kv.lpush(key, value);
 }
 
-async function redisRange(key: string): Promise<string[]> {
+async function redisRange(key: string): Promise<any[]> {
   if (!kv) return [];
   try {
     const result = await kv.lrange(key, 0, -1);
@@ -109,12 +109,8 @@ export async function getAnalytics(): Promise<AnalyticsSnapshot> {
         redisRange(KV_EVENTS),
         redisRange(KV_FEEDBACK),
       ]);
-      events = rawEvents.map((s) => {
-        try { return JSON.parse(s); } catch { return null; }
-      }).filter(Boolean) as ScanRecord[];
-      feedback = rawFeedback.map((s) => {
-        try { return JSON.parse(s); } catch { return null; }
-      }).filter(Boolean) as FeedbackRecord[];
+      events = rawEvents.filter(Boolean) as ScanRecord[];
+      feedback = rawFeedback.filter(Boolean) as FeedbackRecord[];
     } else {
       const store = readStore();
       events = store.events;
@@ -233,12 +229,8 @@ export async function exportAllData(): Promise<{
         redisRange(KV_EVENTS),
         redisRange(KV_FEEDBACK),
       ]);
-      events = rawEvents.map((s) => {
-        try { return JSON.parse(s); } catch { return null; }
-      }).filter(Boolean) as ScanRecord[];
-      feedback = rawFeedback.map((s) => {
-        try { return JSON.parse(s); } catch { return null; }
-      }).filter(Boolean) as FeedbackRecord[];
+      events = rawEvents.filter(Boolean) as ScanRecord[];
+      feedback = rawFeedback.filter(Boolean) as FeedbackRecord[];
     } else {
       const store = readStore();
       events = store.events;
