@@ -2,16 +2,22 @@ import fs from "fs";
 import path from "path";
 import type { ScanRecord, FeedbackRecord, AnalyticsSnapshot } from "./analytics-types";
 
-interface StoreData {
-  events: ScanRecord[];
-  feedback?: FeedbackRecord[];
+const DATA_DIR = path.join(process.cwd(), ".data");
+const ANALYTICS_FILE = path.join(DATA_DIR, "analytics.json");
+
+let kv: typeof import("@vercel/kv").kv | null = null;
+
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const mod = await import("@vercel/kv");
+    kv = mod.kv;
+  }
+} catch {
+  // KV not available, use filesystem
 }
 
-const DATA_DIR = process.env.VERCEL
-  ? "/tmp/kharis-analytics"
-  : path.join(process.cwd(), ".data");
-
-const ANALYTICS_FILE = path.join(DATA_DIR, "analytics.json");
+const KV_EVENTS = "analytics:events";
+const KV_FEEDBACK = "analytics:feedback";
 
 function ensureDir() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -19,7 +25,8 @@ function ensureDir() {
   }
 }
 
-function readStore(): Required<StoreData> {
+function readStore(): { events: ScanRecord[]; feedback: FeedbackRecord[] } {
+  if (kv) return { events: [], feedback: [] };
   try {
     ensureDir();
     if (fs.existsSync(ANALYTICS_FILE)) {
@@ -36,27 +43,48 @@ function readStore(): Required<StoreData> {
   return { events: [], feedback: [] };
 }
 
-function writeStore(data: StoreData) {
+function writeStore(data: { events: ScanRecord[]; feedback: FeedbackRecord[] }) {
+  if (kv) return;
   ensureDir();
   fs.writeFileSync(ANALYTICS_FILE, JSON.stringify(data), "utf-8");
 }
 
-export function addRecord(record: ScanRecord): void {
+export async function addRecord(record: ScanRecord): Promise<void> {
+  if (kv) {
+    await kv.lpush(KV_EVENTS, JSON.stringify(record));
+    return;
+  }
   const store = readStore();
   store.events.push(record);
   writeStore(store);
 }
 
-export function addFeedback(record: FeedbackRecord): void {
+export async function addFeedback(record: FeedbackRecord): Promise<void> {
+  if (kv) {
+    await kv.lpush(KV_FEEDBACK, JSON.stringify(record));
+    return;
+  }
   const store = readStore();
   store.feedback.push(record);
   writeStore(store);
 }
 
-export function getAnalytics(): AnalyticsSnapshot {
-  const store = readStore();
-  const events = store.events;
-  const feedback = store.feedback;
+export async function getAnalytics(): Promise<AnalyticsSnapshot> {
+  let events: ScanRecord[] = [];
+  let feedback: FeedbackRecord[] = [];
+
+  if (kv) {
+    const [rawEvents, rawFeedback] = await Promise.all([
+      kv.lrange(KV_EVENTS, 0, -1) as Promise<string[]>,
+      kv.lrange(KV_FEEDBACK, 0, -1) as Promise<string[]>,
+    ]);
+    events = (rawEvents || []).map((s) => JSON.parse(s)).reverse();
+    feedback = (rawFeedback || []).map((s) => JSON.parse(s)).reverse();
+  } else {
+    const store = readStore();
+    events = store.events;
+    feedback = store.feedback;
+  }
 
   const totalScans = events.length;
 
@@ -100,7 +128,6 @@ export function getAnalytics(): AnalyticsSnapshot {
 
   const recentScans = [...events].reverse().slice(0, 50);
 
-  // Compute feedback stats
   const totalFeedback = feedback.length;
   const averageRating =
     totalFeedback > 0
@@ -151,5 +178,33 @@ export function getAnalytics(): AnalyticsSnapshot {
     averageRating,
     productFeedbackBreakdown,
     recentFeedback,
+  };
+}
+
+export async function exportAllData(): Promise<{
+  events: ScanRecord[];
+  feedback: FeedbackRecord[];
+  generatedAt: string;
+}> {
+  let events: ScanRecord[] = [];
+  let feedback: FeedbackRecord[] = [];
+
+  if (kv) {
+    const [rawEvents, rawFeedback] = await Promise.all([
+      kv.lrange(KV_EVENTS, 0, -1) as Promise<string[]>,
+      kv.lrange(KV_FEEDBACK, 0, -1) as Promise<string[]>,
+    ]);
+    events = (rawEvents || []).map((s) => JSON.parse(s)).reverse();
+    feedback = (rawFeedback || []).map((s) => JSON.parse(s)).reverse();
+  } else {
+    const store = readStore();
+    events = store.events;
+    feedback = store.feedback;
+  }
+
+  return {
+    events,
+    feedback,
+    generatedAt: new Date().toISOString(),
   };
 }

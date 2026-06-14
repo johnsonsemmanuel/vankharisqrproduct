@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       referrer: request.headers.get("referer") || "",
     };
 
-    addRecord(record);
+    await addRecord(record);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

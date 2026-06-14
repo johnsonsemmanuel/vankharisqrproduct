@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       date: new Date().toISOString().slice(0, 10),
     };
 
-    addFeedback(record);
+    await addFeedback(record);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

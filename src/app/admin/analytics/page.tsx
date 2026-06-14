@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   BarChart3, Smartphone, Monitor, Tablet, Globe, Clock,
   RefreshCw, TrendingUp, Hash, Package, LayoutDashboard, LogOut,
-  Star, MessageSquare
+  Star, MessageSquare, Download
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
@@ -36,6 +36,24 @@ export default function AnalyticsPage() {
     }
     fetchData();
   }, [router, fetchData]);
+
+  const handleExport = useCallback(async () => {
+    try {
+      const res = await fetch("/api/analytics/export");
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `kharis-analytics-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const maxProductCount = Math.max(
     ...(data?.productBreakdown.map((p) => p.count) ?? [1]),
@@ -75,7 +93,15 @@ export default function AnalyticsPage() {
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400 dark:text-neutral-400">Realtime</span>
+            <Button
+              onClick={handleExport}
+              variant="ghost"
+              size="icon"
+              className="size-7"
+              title="Export JSON"
+            >
+              <Download className="size-4 text-gray-400 dark:text-neutral-400" />
+            </Button>
             <Button
               onClick={fetchData}
               variant="ghost"
