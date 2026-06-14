@@ -13,7 +13,6 @@ import Accordion from "@/components/Accordion";
 import SectionBody from "@/components/SectionBody";
 import Link from "next/link";
 import { ArrowLeft, ChevronLeft, ChevronRight, Info } from "lucide-react";
-import { useToasts } from "@/lib/use-toasts";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function ProductPage() {
@@ -21,12 +20,6 @@ export default function ProductPage() {
   const product = products.find((p) => p.slug === slug);
 
   if (!product) notFound();
-
-  const { message } = useToasts();
-
-  useEffect(() => {
-    message({ text: "Welcome, valued customer!" });
-  }, []);
 
   const currentIndex = products.findIndex((p) => p.slug === slug);
   const prev = currentIndex > 0 ? products[currentIndex - 1] : null;
