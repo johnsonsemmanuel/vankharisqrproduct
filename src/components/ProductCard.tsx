@@ -3,7 +3,6 @@ import { InteractiveTravelCard } from "@/components/InteractiveTravelCard";
 
 interface ProductCardProps {
   product: ProductCardData;
-  index: number;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {

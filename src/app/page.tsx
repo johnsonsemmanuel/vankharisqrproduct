@@ -58,7 +58,7 @@ export default function HomePage() {
         <section className="px-5 pb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {cardData.map((p) => (
-              <ProductCard key={p.slug} product={p} index={0} />
+              <ProductCard key={p.slug} product={p} />
             ))}
           </div>
         </section>

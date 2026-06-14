@@ -93,8 +93,6 @@ export const InteractiveTravelCard = React.forwardRef<
             </div>
             <Link
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={`View ${title}`}
               style={{ transform: "translateZ(60px)" }}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-inset ring-white/30 transition-colors hover:bg-white/30"

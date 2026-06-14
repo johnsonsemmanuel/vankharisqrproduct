@@ -6,10 +6,9 @@ interface StoreData {
   events: ScanRecord[];
 }
 
-const DATA_DIR =
-  process.env.NODE_ENV === "production"
-    ? "/tmp/kharis-analytics"
-    : path.join(process.cwd(), ".data");
+const DATA_DIR = process.env.VERCEL
+  ? "/tmp/kharis-analytics"
+  : path.join(process.cwd(), ".data");
 
 const ANALYTICS_FILE = path.join(DATA_DIR, "analytics.json");
 
