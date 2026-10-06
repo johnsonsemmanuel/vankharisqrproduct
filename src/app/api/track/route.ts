@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addRecord } from "@/lib/analytics-store";
+import { recordBatchScan } from "@/lib/batch-store";
 import type { ScanRecord } from "@/lib/analytics-types";
 
 function detectDevice(userAgent: string): string {
@@ -33,7 +34,7 @@ function detectOS(userAgent: string): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { productSlug, productName } = body;
+    const { productSlug, productName, batchCode, batch } = body;
 
     if (!productSlug || !productName) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -54,6 +55,11 @@ export async function POST(request: NextRequest) {
     };
 
     await addRecord(record);
+
+    const targetBatch = batchCode || batch;
+    if (targetBatch) {
+      await recordBatchScan(targetBatch);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

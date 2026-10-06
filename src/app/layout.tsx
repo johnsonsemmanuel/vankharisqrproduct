@@ -10,7 +10,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Kharis Foods — Product Guide",
+  title: "Kharis Foods - Product Guide",
   description:
     "Scan the QR code on your Kharis Foods product bag to view usage instructions, product details, and more.",
   icons: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Kharis Foods — Product Guide",
+    title: "Kharis Foods - Product Guide",
     description:
       "Scan the QR code on your Kharis Foods product bag to view usage instructions and product details.",
     siteName: "Kharis Foods",

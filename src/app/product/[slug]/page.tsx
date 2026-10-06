@@ -47,11 +47,14 @@ export default function ProductPage() {
   useEffect(() => {
     if (product) {
       try {
+        const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+        const currentBatch = params?.get("batch");
         navigator.sendBeacon(
           "/api/track",
           JSON.stringify({
             productSlug: product.slug,
             productName: product.name,
+            batchCode: currentBatch || undefined,
           })
         );
       } catch {}

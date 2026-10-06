@@ -110,7 +110,7 @@ export default function AdminFeedbackPage() {
               <SummaryCard
                 icon={ThumbsUp}
                 label="Top Product"
-                value={data.productFeedbackBreakdown[0]?.name ?? "—"}
+                value={data.productFeedbackBreakdown[0]?.name ?? "-"}
                 sub={`${data.productFeedbackBreakdown[0]?.avgRating.toFixed(1) ?? ""} ★`}
               />
               <SummaryCard
@@ -119,7 +119,7 @@ export default function AdminFeedbackPage() {
                 value={
                   data.recentFeedback.length > 0
                     ? `${Math.max(...data.recentFeedback.map((f) => f.rating))} / 5`
-                    : "—"
+                    : "-"
                 }
               />
             </div>

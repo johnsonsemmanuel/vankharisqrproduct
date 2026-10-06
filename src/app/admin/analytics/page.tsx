@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
               <SummaryCard
                 icon={TrendingUp}
                 label="Top Product"
-                value={data.productBreakdown[0]?.name ?? "—"}
+                value={data.productBreakdown[0]?.name ?? "-"}
                 sub={data.productBreakdown[0]?.count.toLocaleString() ?? ""}
               />
               <SummaryCard
@@ -156,13 +156,13 @@ export default function AnalyticsPage() {
                 value={
                   data.recentScans.length > 0
                     ? new Date(data.recentScans[0].timestamp).toLocaleDateString()
-                    : "—"
+                    : "-"
                 }
               />
               <SummaryCard
                 icon={Star}
                 label="Avg Rating"
-                value={data.totalFeedback > 0 ? `${data.averageRating} ★` : "—"}
+                value={data.totalFeedback > 0 ? `${data.averageRating} ★` : "-"}
                 sub={`${data.totalFeedback} reviews`}
               />
               <SummaryCard
