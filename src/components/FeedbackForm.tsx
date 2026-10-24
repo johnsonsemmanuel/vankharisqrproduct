@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Star, MessageSquare, Send, CheckCircle } from "lucide-react";
+import { MessageSquare, Send, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 interface FeedbackFormProps {
   productSlug: string;
   productName: string;
+  batchCode?: string;
 }
 
-export default function FeedbackForm({ productSlug, productName }: FeedbackFormProps) {
+export default function FeedbackForm({ productSlug, productName, batchCode }: FeedbackFormProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
@@ -29,6 +30,7 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
         body: JSON.stringify({
           productSlug,
           productName,
+          batchCode,
           rating,
           comment,
         }),
@@ -65,28 +67,29 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
               </p>
             </div>
 
-            {/* Star Rating Selector */}
-            <div className="flex items-center justify-center gap-1 py-1" role="group" aria-label="Rating">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  type="button"
-                  key={star}
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoverRating(star)}
-                  onMouseLeave={() => setHoverRating(0)}
-                  aria-label={`Rate ${star} out of 5`}
-                  aria-pressed={rating === star}
-                  className="flex h-10 w-10 items-center justify-center cursor-pointer rounded-lg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-kharis-green-600"
-                >
-                  <Star
-                    className={`w-7 h-7 transition-colors ${
-                      star <= (hoverRating || rating)
-                        ? "fill-kharis-gold-500 text-kharis-gold-500"
-                        : "text-neutral-300 dark:text-neutral-700"
+            {/* Numeric Rating Selector */}
+            <div className="flex items-center justify-center gap-2 py-1" role="group" aria-label="Rating">
+              {[1, 2, 3, 4, 5].map((score) => {
+                const active = score <= (hoverRating || rating);
+                return (
+                  <button
+                    type="button"
+                    key={score}
+                    onClick={() => setRating(score)}
+                    onMouseEnter={() => setHoverRating(score)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    aria-label={`Rate ${score} out of 5`}
+                    aria-pressed={rating === score}
+                    className={`flex h-10 w-10 items-center justify-center cursor-pointer rounded-xl border text-sm font-bold transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-kharis-green-600 ${
+                      active
+                        ? "border-kharis-green-600 bg-kharis-green-600 text-white shadow-2xs"
+                        : "border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-300 hover:border-kharis-green-500"
                     }`}
-                  />
-                </button>
-              ))}
+                  >
+                    {score}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Comment Field */}

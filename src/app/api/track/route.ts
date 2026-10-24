@@ -3,6 +3,7 @@ import { addRecord } from "@/lib/analytics-store";
 import { recordBatchScan } from "@/lib/batch-store";
 import { isSupabaseConfigured, supabaseQuery } from "@/lib/supabase";
 import type { ScanRecord } from "@/lib/analytics-types";
+import crypto from "crypto";
 
 function detectDevice(userAgent: string): string {
   const ua = userAgent.toLowerCase();
@@ -32,6 +33,13 @@ function detectOS(userAgent: string): string {
   return "Other";
 }
 
+function getIpHash(request: NextRequest): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0].trim() || request.headers.get("x-real-ip") || "unknown";
+  const salt = process.env.IP_SALT || "kharis-salt";
+  return crypto.createHash("sha256").update(ip + salt).digest("hex").slice(0, 16);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -45,6 +53,7 @@ export async function POST(request: NextRequest) {
     const deviceType = detectDevice(userAgent);
     const browser = detectBrowser(userAgent);
     const os = detectOS(userAgent);
+    const ipHash = getIpHash(request);
 
     const record: ScanRecord = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -71,6 +80,7 @@ export async function POST(request: NextRequest) {
             device_type: deviceType,
             browser,
             os,
+            ip_hash: ipHash,
           },
         });
       } catch (e) {
@@ -81,9 +91,25 @@ export async function POST(request: NextRequest) {
     // 2. Local / Redis analytics record
     await addRecord(record);
 
-    // 3. Batch scan increment
+    // 3. Batch scan increment (deduplicate by IP within 24h)
     if (targetBatch) {
-      await recordBatchScan(targetBatch);
+      let shouldIncrement = true;
+      if (isSupabaseConfigured) {
+        try {
+          const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+          const { data } = await supabaseQuery<any[]>(
+            `scan_events?batch_code=eq.${encodeURIComponent(targetBatch)}&ip_hash=eq.${ipHash}&scanned_at=gte.${encodeURIComponent(yesterday)}&select=id&limit=1`
+          );
+          if (Array.isArray(data) && data.length > 0) {
+            shouldIncrement = false;
+          }
+        } catch (e) {
+          console.error("Dedup check error:", e);
+        }
+      }
+      if (shouldIncrement) {
+        await recordBatchScan(targetBatch);
+      }
     }
 
     return NextResponse.json({ ok: true });

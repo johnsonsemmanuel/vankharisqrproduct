@@ -10,7 +10,6 @@ import {
   MessageSquare,
   ChevronRight,
   ScanLine,
-  Star,
   Package,
   RefreshCw,
   ArrowUpRight,
@@ -176,15 +175,15 @@ export default function AdminPage() {
         />
         <StatCard
           label="Feedback"
-          value={loading ? "—" : (analytics?.totalFeedback ?? 0).toLocaleString()}
+          value={loading ? "-" : (analytics?.totalFeedback ?? 0).toLocaleString()}
           hint="Verified reviews"
           icon={MessageSquare}
         />
         <StatCard
           label="Average rating"
-          value={loading ? "—" : averageRating > 0 ? `${averageRating.toFixed(1)} / 5` : "—"}
+          value={loading ? "-" : averageRating > 0 ? `${averageRating.toFixed(1)} / 5` : "-"}
           hint={`${analytics?.totalFeedback ?? 0} ratings collected`}
-          icon={Star}
+          icon={BarChart3}
         />
       </div>
 
@@ -291,9 +290,8 @@ export default function AdminPage() {
                     <p className="truncate text-xs font-semibold text-neutral-900 dark:text-neutral-100">
                       {feedback.productName}
                     </p>
-                    <span className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400">
-                      <Star className="h-3 w-3 fill-current" />
-                      {feedback.rating}
+                    <span className="shrink-0 rounded-md bg-brand-50 px-1.5 py-0.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                      {feedback.rating} / 5
                     </span>
                   </div>
                   <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-neutral-500 dark:text-neutral-400">

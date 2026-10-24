@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactElement } from "react";
-import { Hash, Package, TrendingUp, Clock, Star, MessageSquare, Smartphone, Monitor, Tablet } from "lucide-react";
+import { Hash, Package, TrendingUp, Clock, MessageSquare, Smartphone, Monitor, Tablet } from "lucide-react";
 
 interface SummaryCardProps {
   icon: React.ElementType;

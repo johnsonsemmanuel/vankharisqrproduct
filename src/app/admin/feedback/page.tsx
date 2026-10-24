@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Star, MessageSquare, ThumbsUp,
+  MessageSquare, ThumbsUp, BarChart3,
   RefreshCw,
 } from "lucide-react";
 import { checkAuth } from "@/lib/admin-auth";
@@ -74,7 +74,7 @@ export default function AdminFeedbackPage() {
                 value={data.totalFeedback.toLocaleString()}
               />
               <SummaryCard
-                icon={Star}
+                icon={BarChart3}
                 label="Avg Rating"
                 value={`${data.averageRating} / 5`}
               />
@@ -82,10 +82,10 @@ export default function AdminFeedbackPage() {
                 icon={ThumbsUp}
                 label="Top Product"
                 value={data.productFeedbackBreakdown[0]?.name ?? "-"}
-                sub={`${data.productFeedbackBreakdown[0]?.avgRating.toFixed(1) ?? ""} ★`}
+                sub={data.productFeedbackBreakdown[0] ? `${data.productFeedbackBreakdown[0].avgRating.toFixed(1)} / 5` : undefined}
               />
               <SummaryCard
-                icon={Star}
+                icon={BarChart3}
                 label="Top Rating"
                 value={
                   data.recentFeedback.length > 0
@@ -98,7 +98,7 @@ export default function AdminFeedbackPage() {
             {/* Per-Product Breakdown */}
             <section className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-5">
               <div className="flex items-center gap-2 mb-4">
-                <Star className="size-4 text-gray-500 dark:text-neutral-300" />
+                <BarChart3 className="size-4 text-gray-500 dark:text-neutral-300" />
                 <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">Ratings by Product</h2>
               </div>
               <div className="space-y-4">
@@ -109,27 +109,15 @@ export default function AdminFeedbackPage() {
                         {p.name}
                       </span>
                       <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-0.5">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className={`size-3 ${
-                                star <= Math.round(p.avgRating)
-                                  ? "fill-kharis-gold-500 text-kharis-gold-500"
-                                  : "text-gray-300 dark:text-neutral-700"
-                              }`}
-                            />
-                          ))}
-                        </div>
                         <span className="text-sm font-bold text-gray-800 dark:text-neutral-100 min-w-[3ch] text-right">
-                          {p.avgRating.toFixed(1)}
+                          {p.avgRating.toFixed(1)} / 5
                         </span>
                         <span className="text-xs text-gray-400 dark:text-neutral-400">({p.count})</span>
                       </div>
                     </div>
                     <div className="h-2 bg-gray-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-kharis-gold-500 rounded-full transition-all duration-500"
+                        className="h-full bg-kharis-green-600 rounded-full transition-all duration-500"
                         style={{
                           width: `${(p.avgRating / 5) * 100}%`,
                         }}
@@ -163,18 +151,9 @@ export default function AdminFeedbackPage() {
                           {new Date(f.timestamp).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`size-3 ${
-                              star <= f.rating
-                                ? "fill-kharis-gold-500 text-kharis-gold-500"
-                                : "text-gray-300 dark:text-neutral-700"
-                            }`}
-                          />
-                        ))}
-                      </div>
+                      <span className="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                        {f.rating} / 5
+                      </span>
                     </div>
                     {f.comment && (
                       <p className="text-sm text-gray-600 dark:text-neutral-300 leading-relaxed">

@@ -9,7 +9,7 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Sparkles,
+  RefreshCw,
   Settings,
   FileSpreadsheet,
   Layers,
@@ -308,7 +308,7 @@ export default function QRStudioMainPage() {
                     onClick={handleAutoBatch}
                     className="rounded-xl px-3.5 gap-1.5"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <RefreshCw className="w-3.5 h-3.5" />
                     New Code
                   </Button>
                 </div>

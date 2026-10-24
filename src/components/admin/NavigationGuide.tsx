@@ -219,7 +219,7 @@ export const adminGuides = {
     ],
     steps: [
       { number: 1, title: "Summary Stats", description: "Total entries, average rating, top product, peak rating", icon: <Zap className="w-4 h-4" /> },
-      { number: 2, title: "Product Ratings", description: "Star visualization with average score and review count", icon: <MousePointer className="w-4 h-4" /> },
+      { number: 2, title: "Product Ratings", description: "Score visualization with average score and review count", icon: <MousePointer className="w-4 h-4" /> },
       { number: 3, title: "Recent Feedback", description: "Expandable cards with ratings, dates, and comments", icon: <Command className="w-4 h-4" /> },
     ],
     tips: [

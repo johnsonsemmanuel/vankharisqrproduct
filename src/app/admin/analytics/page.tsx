@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   BarChart3, Smartphone, Monitor, Tablet, Globe, Clock,
   RefreshCw, TrendingUp, Hash, Package,
-  Star, MessageSquare, Download, Calendar, Filter
+  MessageSquare, Download, Calendar, Filter
 } from "lucide-react";
 import { checkAuth } from "@/lib/admin-auth";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
@@ -238,9 +238,9 @@ export default function AnalyticsPage() {
                 }
               />
               <SummaryCard
-                icon={Star}
+                icon={BarChart3}
                 label="Avg Rating"
-                value={filteredData!.totalFeedback > 0 ? `${filteredData!.averageRating} ★` : "-"}
+                value={filteredData!.totalFeedback > 0 ? `${filteredData!.averageRating} / 5` : "-"}
                 sub={`${filteredData!.totalFeedback} reviews`}
               />
               <SummaryCard
@@ -385,7 +385,7 @@ export default function AnalyticsPage() {
             {filteredData!.totalFeedback > 0 && (
               <section className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Star className="size-4 text-kharis-gold-500 fill-kharis-gold-500" />
+                  <MessageSquare className="size-4 text-kharis-green-600" />
                   <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">
                     Consumer Feedback & Reviews
                   </h2>
@@ -394,20 +394,11 @@ export default function AnalyticsPage() {
                   {filteredData!.recentFeedback.map((f) => (
                     <div key={f.id} className="p-3 bg-gray-50 dark:bg-neutral-950 rounded-lg border border-gray-100 dark:border-neutral-800">
                       <div className="flex justify-between items-start">
-                        <div>
+                        <div className="flex items-center gap-2">
                           <p className="text-xs font-bold text-gray-800 dark:text-neutral-200">{f.productName}</p>
-                          <div className="flex items-center gap-0.5 mt-0.5">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star
-                                key={s}
-                                className={`w-3 h-3 ${
-                                  s <= f.rating
-                                    ? "fill-kharis-gold-500 text-kharis-gold-500"
-                                    : "text-gray-300 dark:text-neutral-700"
-                                }`}
-                              />
-                            ))}
-                          </div>
+                          <span className="rounded-md bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                            {f.rating} / 5
+                          </span>
                         </div>
                         <span className="text-[10px] text-gray-400 dark:text-neutral-400">
                           {new Date(f.timestamp).toLocaleDateString()}

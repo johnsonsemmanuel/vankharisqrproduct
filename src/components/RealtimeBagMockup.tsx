@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Sparkles, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { generateEAN13Svg, formatToValidEAN13 } from "@/lib/ean13";
 import type { MaterialConfig } from "@/lib/qr-types";
 
