@@ -104,11 +104,11 @@ export default function ProductPage() {
           style={{ scaleX }}
         />
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
         {/* Back navigation */}
         <div className="sticky top-0 z-40 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-xs border-b border-neutral-200/80 dark:border-neutral-800">
           <div className="max-w-4xl mx-auto flex items-center justify-between px-4 sm:px-6 h-14">
@@ -250,6 +250,7 @@ export default function ProductPage() {
             </p>
           </div>
         </footer>
+        </motion.div>
       </motion.div>
     </>
   );
