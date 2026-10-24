@@ -30,7 +30,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   themeColor: "#1b5e20",
 };
 
@@ -44,9 +43,7 @@ export default function RootLayout({
       <body className="min-h-dvh font-sans antialiased">
         <ThemeProvider>
           <RegisterSW />
-          <main className="mx-auto max-w-lg min-h-dvh bg-white dark:bg-neutral-950 shadow-sm dark:shadow-black/30">
-            {children}
-          </main>
+          {children}
         </ThemeProvider>
       </body>
     </html>

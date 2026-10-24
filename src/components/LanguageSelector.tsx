@@ -35,12 +35,12 @@ export default function LanguageSelector({ currentLocale, onChange }: LanguageSe
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="h-9 px-2.5 flex items-center gap-1.5 rounded-lg border border-kharis-green-150 dark:border-neutral-800 bg-kharis-green-50/30 dark:bg-neutral-900/30 text-kharis-green-600 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-800 transition-colors focus-visible:outline-2 focus-visible:outline-kharis-green-500 text-xs font-semibold cursor-pointer"
+        className="h-9 px-3 flex items-center gap-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-visible:outline-2 focus-visible:outline-brand-600 text-xs font-semibold cursor-pointer"
         aria-label="Select language"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Globe className="w-3.5 h-3.5 text-kharis-green-500 dark:text-kharis-gold-500" />
+        <Globe className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
         <span>{currentLocale.toUpperCase()}</span>
         <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
       </button>
@@ -66,17 +66,17 @@ export default function LanguageSelector({ currentLocale, onChange }: LanguageSe
                     onChange(lang.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors text-left font-medium cursor-pointer
+                  className={`w-full flex items-center justify-between px-2.5 py-2.5 min-h-11 rounded-lg text-xs transition-colors text-left font-medium cursor-pointer
                     ${
                       isSelected
                         ? "text-kharis-green-800 dark:text-kharis-gold-400 bg-kharis-green-50 dark:bg-neutral-900"
-                        : "text-kharis-green-600 dark:text-neutral-400 hover:bg-kharis-green-50/50 dark:hover:bg-neutral-900/50"
+                        : "text-kharis-green-700 dark:text-neutral-400 hover:bg-kharis-green-50/50 dark:hover:bg-neutral-900/50"
                     }
                   `}
                   role="menuitem"
                 >
                   <span>{lang.label}</span>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-kharis-green-600 dark:text-kharis-gold-500" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 text-kharis-green-700 dark:text-kharis-gold-500" />}
                 </button>
               );
             })}

@@ -43,10 +43,10 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
             <button
               key={r.name}
               onClick={() => handleSelectRecipe(idx)}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`flex-1 min-h-11 py-2 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 selectedIdx === idx
                   ? "bg-white dark:bg-neutral-800 text-kharis-green-800 dark:text-kharis-gold-400 shadow-sm"
-                  : "text-kharis-green-600 dark:text-neutral-400 hover:text-kharis-green-800 dark:hover:text-neutral-200"
+                  : "text-kharis-green-700 dark:text-neutral-400 hover:text-kharis-green-900 dark:hover:text-neutral-200"
               }`}
             >
               {r.name}
@@ -67,13 +67,13 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
         <div className="flex gap-4 mb-5 text-xs text-neutral-600 dark:text-neutral-400">
           {recipe.prepTime && (
             <div className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-kharis-green-500" />
+              <Clock className="w-3.5 h-3.5 text-kharis-green-700" />
               <span>Prep: {recipe.prepTime}</span>
             </div>
           )}
           {recipe.cookTime && (
             <div className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-kharis-green-500" />
+              <Clock className="w-3.5 h-3.5 text-kharis-green-700" />
               <span>Cook: {recipe.cookTime}</span>
             </div>
           )}
@@ -90,18 +90,21 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => setServings(Math.max(1, servings - 1))}
-              className="w-7 h-7 flex items-center justify-center rounded-md border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 cursor-pointer"
+              disabled={servings <= 1}
+              aria-label="Decrease servings"
+              className="w-10 h-10 flex items-center justify-center rounded-lg border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 disabled:opacity-40 cursor-pointer"
             >
-              <Minus className="w-3.5 h-3.5" />
+              <Minus className="w-4 h-4" />
             </button>
             <span className="text-sm font-black text-kharis-green-800 dark:text-neutral-100 w-6 text-center">
               {servings}
             </span>
             <button
               onClick={() => setServings(servings + 1)}
-              className="w-7 h-7 flex items-center justify-center rounded-md border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 cursor-pointer"
+              aria-label="Increase servings"
+              className="w-10 h-10 flex items-center justify-center rounded-lg border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4" />
             </button>
           </div>
         </div>

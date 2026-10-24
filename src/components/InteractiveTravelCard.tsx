@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -12,107 +11,53 @@ export interface InteractiveTravelCardProps {
   imageUrl: string;
   actionText: string;
   href: string;
+  badge?: string;
   className?: string;
 }
 
 export const InteractiveTravelCard = React.forwardRef<
   HTMLDivElement,
   InteractiveTravelCardProps
->(({ title, subtitle, imageUrl, actionText, href, className }, ref) => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 150 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
-
-  const rotateX = useTransform(springY, [-0.5, 0.5], ["10.5deg", "-10.5deg"]);
-  const rotateY = useTransform(springX, [-0.5, 0.5], ["-10.5deg", "10.5deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const { width, height, left, top } = rect;
-    const mouseXVal = e.clientX - left;
-    const mouseYVal = e.clientY - top;
-    const xPct = mouseXVal / width - 0.5;
-    const yPct = mouseYVal / height - 0.5;
-    mouseX.set(xPct);
-    mouseY.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
+>(({ title, subtitle, imageUrl, actionText, href, badge, className }, ref) => {
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className={cn(
-        "relative h-[26rem] w-full rounded-2xl bg-transparent shadow-2xl border border-kharis-green-100/30",
-        className
-      )}
-    >
-      <div
-        style={{
-          transform: "translateZ(50px)",
-          transformStyle: "preserve-3d",
-        }}
-        className="absolute inset-4 grid h-[calc(100%-2rem)] w-[calc(100%-2rem)] grid-rows-[1fr_auto] rounded-xl shadow-lg"
+    <div ref={ref} className={cn("group relative w-full", className)}>
+      <Link
+        href={href}
+        aria-label={`${actionText}: ${title}`}
+        className="block overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-brand-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
       >
-        <img
-          src={imageUrl}
-          alt={title}
-          className="absolute inset-0 h-full w-full rounded-xl object-cover"
-        />
-
-        <div className="absolute inset-0 h-full w-full rounded-xl bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-
-        <div className="relative flex flex-col justify-between rounded-xl p-4 text-white">
-          <div className="flex items-start justify-between">
-            <div>
-              <motion.h2
-                style={{ transform: "translateZ(50px)" }}
-                className="text-2xl font-bold"
-              >
-                {title}
-              </motion.h2>
-              <motion.p
-                style={{ transform: "translateZ(40px)" }}
-                className="text-sm font-light text-white/80"
-              >
-                {subtitle}
-              </motion.p>
-            </div>
-            <Link
-              href={href}
-              aria-label={`View ${title}`}
-              style={{ transform: "translateZ(60px)" }}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-inset ring-white/30 transition-colors hover:bg-white/30"
-            >
-              <ArrowUpRight className="h-5 w-5 text-white" />
-            </Link>
-          </div>
-
-          <Link
-            href={href}
-            className={cn(
-              "w-full rounded-lg py-3 text-center font-semibold text-white transition-colors",
-              "bg-white/10 backdrop-blur-md ring-1 ring-inset ring-white/20 hover:bg-white/20"
-            )}
-          >
-            {actionText}
-          </Link>
+        <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+          <img
+            src={imageUrl}
+            alt={title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
+          {badge && (
+            <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-800 shadow-xs backdrop-blur-xs dark:bg-neutral-950/85 dark:text-brand-200">
+              {badge}
+            </span>
+          )}
         </div>
-      </div>
-    </motion.div>
+
+        <div className="flex items-center justify-between gap-3 p-4 sm:p-5">
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-bold leading-tight text-neutral-900 group-hover:text-brand-700 dark:text-neutral-100 dark:group-hover:text-brand-300 transition-colors">
+              {title}
+            </h2>
+            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+              {subtitle}
+            </p>
+          </div>
+          <span
+            aria-hidden="true"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-600 group-hover:text-white dark:bg-neutral-800 dark:text-brand-300 dark:group-hover:bg-brand-600 dark:group-hover:text-white"
+          >
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
+      </Link>
+    </div>
   );
 });
 InteractiveTravelCard.displayName = "InteractiveTravelCard";

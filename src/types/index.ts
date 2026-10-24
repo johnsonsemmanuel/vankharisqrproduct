@@ -12,7 +12,10 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
+  gtin?: string;
+  sku?: string;
   tagline?: string;
+  blurDataUrl?: string;
   description: string;
   images: string[];
   usageGuide: UsageStep[];

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShieldCheck, CheckCircle2, AlertTriangle, BadgeCheck, PackageCheck, Layers } from "lucide-react";
-import { motion } from "framer-motion";
+import { ShieldCheck, CheckCircle2, AlertTriangle, BadgeCheck, Clock } from "lucide-react";
 
 interface AuthenticityCardProps {
+  slug?: string;
   batch: string | null;
+  timestamp?: string | null;
+  sig?: string | null;
 }
 
 interface BatchInfo {
@@ -18,163 +20,256 @@ interface BatchInfo {
   qrColorName: string;
   facility: string;
   scanCount: number;
+  status?: string;
 }
 
-export default function AuthenticityCard({ batch }: AuthenticityCardProps) {
-  const [verifiedBatch, setVerifiedBatch] = useState<BatchInfo | null>(null);
-  const [loading, setLoading] = useState(false);
+type VerificationState = "loading" | "verified" | "expired" | "invalid" | "unregistered";
+
+export default function AuthenticityCard({
+  slug,
+  batch,
+  timestamp,
+  sig,
+}: AuthenticityCardProps) {
+  const [state, setState] = useState<VerificationState>("loading");
+  const [batchInfo, setBatchInfo] = useState<BatchInfo | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    if (!batch) return;
+    if (!batch) {
+      setState("verified");
+      return;
+    }
 
     let isMounted = true;
-    setLoading(true);
+    setState("loading");
 
-    fetch(`/api/batches/verify?code=${encodeURIComponent(batch.trim())}`)
+    const query = new URLSearchParams({
+      code: batch.trim(),
+      ...(slug ? { slug } : {}),
+      ...(timestamp ? { ts: timestamp } : {}),
+      ...(sig ? { sig } : {}),
+    });
+
+    fetch(`/api/batches/verify?${query.toString()}`)
       .then((res) => res.json())
       .then((data) => {
-        if (isMounted && data.ok && data.found && data.batch) {
-          setVerifiedBatch(data.batch);
+        if (!isMounted) return;
+
+        if (data.signature?.status === "tampered") {
+          setState("invalid");
+          setErrorMessage("QR code parameters or batch code have been modified.");
+          return;
+        }
+
+        if (data.signature?.status === "expired") {
+          setState("expired");
+          setErrorMessage("Production certificate has exceeded physical shelf-life limits.");
+          return;
+        }
+
+        if (data.ok && data.found && data.batch) {
+          setBatchInfo(data.batch);
+          if (data.batch.status === "archived") {
+            setState("expired");
+          } else {
+            setState("verified");
+          }
+        } else if (data.ok && !data.found) {
+          if (batch.startsWith("KF-")) {
+            setState("unregistered");
+          } else {
+            setState("invalid");
+            setErrorMessage("Batch code format does not match Kharis Foods security specifications.");
+          }
+        } else {
+          setState("invalid");
+          setErrorMessage("Verification failed. Please try again.");
         }
       })
-      .catch(() => {})
-      .finally(() => {
-        if (isMounted) setLoading(false);
+      .catch(() => {
+        if (isMounted) {
+          if (batch.startsWith("KF-")) {
+            setState("unregistered");
+          } else {
+            setState("invalid");
+            setErrorMessage("Verification failed. Please try again.");
+          }
+        }
       });
 
     return () => {
       isMounted = false;
     };
-  }, [batch]);
+  }, [batch, slug, timestamp, sig]);
 
-  // If no batch is provided, show a general guide verification banner
+  // General guide banner (when no batch is provided)
   if (!batch) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mx-5 mt-4 p-3 rounded-xl border bg-kharis-green-50/40 border-kharis-green-100 dark:bg-neutral-900/20 dark:border-neutral-800/50"
-      >
-        <div className="flex items-center gap-2.5">
-          <BadgeCheck className="w-5 h-5 text-kharis-green-700 dark:text-kharis-gold-400 shrink-0" />
-          <div>
-            <h3 className="text-xs font-bold text-kharis-green-800 dark:text-neutral-200">
-              Verified Product Guide
-            </h3>
-            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
-              This is the official instructions and cooking guide portal for Kharis Foods.
-            </p>
-          </div>
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 px-4 py-3 rounded-xl border border-brand-200/80 bg-brand-50/60 dark:bg-brand-950/30 dark:border-brand-800/60 flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg bg-brand-100/80 dark:bg-brand-900/50 flex items-center justify-center shrink-0">
+          <BadgeCheck className="w-4 h-4 text-brand-700 dark:text-brand-300" />
         </div>
-      </motion.div>
+        <div className="min-w-0">
+          <h3 className="text-xs font-bold text-brand-900 dark:text-brand-100 leading-tight">
+            Verified Product Guide
+          </h3>
+          <p className="text-[11px] text-neutral-600 dark:text-neutral-400 mt-0.5 leading-snug">
+            Official preparation and authentic storage specifications from Kharis Foods.
+          </p>
+        </div>
+      </div>
     );
   }
 
-  const isValidFormat = batch.startsWith("KF-");
-  const isRegistered = Boolean(verifiedBatch);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`mx-5 mt-4 p-4 rounded-xl border ${
-        isValidFormat
-          ? "bg-emerald-50/80 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800/60"
-          : "bg-amber-50/80 border-amber-200 dark:bg-amber-950/20 dark:border-amber-800/60"
-      }`}
-    >
-      <div className="flex gap-3">
-        <div className="shrink-0 mt-0.5">
-          {isValidFormat ? (
-            <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          ) : (
-            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-          )}
+  // Skeleton Loader
+  if (state === "loading") {
+    return (
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/60 dark:bg-neutral-900/30">
+        <div className="flex items-start gap-3">
+          <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-800 shrink-0 mt-0.5" />
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/3" />
+            <div className="h-3 bg-neutral-100 dark:bg-neutral-800/60 rounded w-2/3" />
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <h3
-              className={`text-sm font-bold ${
-                isValidFormat
-                  ? "text-emerald-800 dark:text-emerald-300"
-                  : "text-amber-800 dark:text-amber-300"
-              }`}
-            >
-              {isRegistered
-                ? "Authentic Registered Batch Verified"
-                : isValidFormat
-                ? "Authentic Kharis Foods Product"
-                : "Unverified Batch Format"}
-            </h3>
-            {isRegistered && (
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200">
-                Tracked Batch
-              </span>
+      </div>
+    );
+  }
+
+  // State: Tampered / Invalid
+  if (state === "invalid") {
+    return (
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-rose-200 bg-rose-50/70 dark:border-rose-800/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-200">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold">Security Warning: Verification Failed</h3>
+            <p className="text-xs mt-1 leading-relaxed opacity-90">
+              {errorMessage || "The batch identification parameters could not be validated against official Kharis Foods records."}
+            </p>
+            <div className="mt-2 text-[10px] font-mono opacity-80">
+              Code: {batch}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // State: Expired / Out of date
+  if (state === "expired") {
+    return (
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-amber-200 bg-amber-50/70 dark:border-amber-800/50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200">
+        <div className="flex items-start gap-3">
+          <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold">Batch Shelf-Life Notice</h3>
+            <p className="text-xs mt-1 leading-relaxed opacity-90">
+              This packaging certificate has reached or passed its recommended shelf-life window. Please check the physical Best Before date printed on the packaging seal.
+            </p>
+            {batchInfo && (
+              <div className="mt-2 text-[10px] font-mono opacity-80">
+                Batch: {batchInfo.batchCode}
+              </div>
             )}
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
-            {verifiedBatch ? (
-              <>
-                Verified Kharis Foods production run for batch{" "}
-                <strong className="font-mono text-emerald-900 dark:text-emerald-200">
-                  {verifiedBatch.batchCode}
-                </strong>
-                . Registered print volume:{" "}
-                <strong className="text-emerald-900 dark:text-emerald-200">
-                  {verifiedBatch.printQuantity.toLocaleString()} packages
-                </strong>
-                .
-              </>
-            ) : isValidFormat ? (
-              `This package is verified as an authentic Kharis Foods product from batch ${batch}.`
-            ) : (
-              "This QR code contains an unverified batch number. Please verify the source of this product."
-            )}
-          </p>
-
-          {/* Traceability Metadata */}
-          {isRegistered && verifiedBatch && (
-            <div className="mt-3 pt-2.5 border-t border-emerald-200/60 dark:border-emerald-900/60 grid grid-cols-2 gap-2 text-[10px] text-emerald-800 dark:text-emerald-300">
-              <div className="flex items-center gap-1.5">
-                <PackageCheck className="size-3 text-emerald-600 dark:text-emerald-400" />
-                <span>
-                  <strong>Run Size:</strong> {verifiedBatch.printQuantity.toLocaleString()} bags
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Layers className="size-3 text-emerald-600 dark:text-emerald-400" />
-                <span>
-                  <strong>Material:</strong> {verifiedBatch.packagingMaterial}
-                </span>
-              </div>
-              {verifiedBatch.productionDate && (
-                <div>
-                  <strong>Packed:</strong> {verifiedBatch.productionDate}
-                </div>
-              )}
-              {verifiedBatch.scanCount > 0 && (
-                <div>
-                  <strong>Verified Scans:</strong> {verifiedBatch.scanCount.toLocaleString()}
-                </div>
-              )}
+  // State: Valid format but uncatalogued/fallback batch
+  if (state === "unregistered") {
+    return (
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-brand-200/80 bg-brand-50/60 dark:border-brand-800/60 dark:bg-brand-950/30">
+        <div className="flex items-start gap-3">
+          <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+                Authentic Kharis Foods Product
+              </h3>
+              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300">
+                Standard Batch
+              </span>
             </div>
-          )}
-
-          {isValidFormat && (
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 pt-2 border-t border-emerald-100 dark:border-emerald-900/50">
-              <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
+            <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+              Verified standard production code for batch{" "}
+              <strong className="font-mono text-brand-900 dark:text-brand-200">{batch}</strong>.
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 pt-2 border-t border-brand-200/60 dark:border-brand-800/50">
+              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
                 <CheckCircle2 className="w-3 h-3" />
                 Freshness Certified
               </div>
-              <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
+              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
                 <CheckCircle2 className="w-3 h-3" />
                 100% Quality Checked
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
-    </motion.div>
+    );
+  }
+
+  // State: Verified Registered Batch
+  return (
+    <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-brand-200/80 bg-brand-50/70 dark:border-brand-800/50 dark:bg-brand-950/30">
+      <div className="flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+              Authentic Kharis Foods Verified
+            </h3>
+            <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300">
+              Registered Run
+            </span>
+          </div>
+
+          <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+            Officially catalogued production run for{" "}
+            <strong className="font-semibold text-neutral-900 dark:text-white">{batchInfo?.productName}</strong>
+            . Packed at {batchInfo?.facility || "Accra Processing Center"}.
+          </p>
+
+          <div className="mt-3 pt-2.5 border-t border-brand-200/60 dark:border-brand-800/60 grid grid-cols-2 gap-2 text-[10px] text-brand-800 dark:text-brand-300">
+            <div>
+              <span className="text-neutral-500 dark:text-neutral-400">Batch Code: </span>
+              <span className="font-mono font-semibold">{batchInfo?.batchCode}</span>
+            </div>
+            <div>
+              <span className="text-neutral-500 dark:text-neutral-400">Material: </span>
+              <span className="font-semibold">{batchInfo?.packagingMaterial}</span>
+            </div>
+            {batchInfo?.productionDate && (
+              <div>
+                <span className="text-neutral-500 dark:text-neutral-400">Pack Date: </span>
+                <span className="font-semibold">{batchInfo.productionDate}</span>
+              </div>
+            )}
+            {batchInfo && batchInfo.scanCount > 0 && (
+              <div>
+                <span className="text-neutral-500 dark:text-neutral-400">Verified Scans: </span>
+                <span className="font-mono font-semibold">{batchInfo.scanCount.toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 pt-2 border-t border-brand-200/60 dark:border-brand-800/50">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
+              <CheckCircle2 className="w-3 h-3" />
+              Freshness Certified
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
+              <CheckCircle2 className="w-3 h-3" />
+              FDA Ghana Compliant
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

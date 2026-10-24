@@ -66,7 +66,7 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
             </div>
 
             {/* Star Rating Selector */}
-            <div className="flex items-center justify-center gap-1.5 py-1">
+            <div className="flex items-center justify-center gap-1 py-1" role="group" aria-label="Rating">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type="button"
@@ -74,10 +74,12 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
-                  className="p-1 cursor-pointer transition-transform active:scale-95"
+                  aria-label={`Rate ${star} out of 5`}
+                  aria-pressed={rating === star}
+                  className="flex h-10 w-10 items-center justify-center cursor-pointer rounded-lg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-kharis-green-600"
                 >
                   <Star
-                    className={`w-6 h-6 transition-colors ${
+                    className={`w-7 h-7 transition-colors ${
                       star <= (hoverRating || rating)
                         ? "fill-kharis-gold-500 text-kharis-gold-500"
                         : "text-neutral-300 dark:text-neutral-700"
@@ -109,7 +111,7 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full h-8 cursor-pointer rounded-lg text-xs"
+                  className="w-full h-11 cursor-pointer rounded-lg text-xs"
                 >
                   {submitting ? "Submitting..." : "Submit Experience"}
                   <Send className="w-3.5 h-3.5 ml-1.5" />
@@ -124,7 +126,7 @@ export default function FeedbackForm({ productSlug, productName }: FeedbackFormP
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-4 flex flex-col items-center gap-2"
           >
-            <CheckCircle className="w-8 h-8 text-emerald-500 animate-in zoom-in duration-300" />
+            <CheckCircle className="w-8 h-8 text-brand-700 animate-in zoom-in duration-300" />
             <h3 className="text-sm font-bold text-kharis-green-800 dark:text-neutral-100">
               Thank you for cooking with us!
             </h3>

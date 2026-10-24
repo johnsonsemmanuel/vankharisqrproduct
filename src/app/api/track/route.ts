@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addRecord } from "@/lib/analytics-store";
 import { recordBatchScan } from "@/lib/batch-store";
+import { isSupabaseConfigured, supabaseQuery } from "@/lib/supabase";
 import type { ScanRecord } from "@/lib/analytics-types";
 
 function detectDevice(userAgent: string): string {
@@ -41,6 +42,9 @@ export async function POST(request: NextRequest) {
     }
 
     const userAgent = request.headers.get("user-agent") || "Unknown";
+    const deviceType = detectDevice(userAgent);
+    const browser = detectBrowser(userAgent);
+    const os = detectOS(userAgent);
 
     const record: ScanRecord = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -48,15 +52,36 @@ export async function POST(request: NextRequest) {
       productName,
       timestamp: Date.now(),
       date: new Date().toISOString().slice(0, 10),
-      deviceType: detectDevice(userAgent),
-      browser: detectBrowser(userAgent),
-      os: detectOS(userAgent),
+      deviceType,
+      browser,
+      os,
       referrer: request.headers.get("referer") || "",
     };
 
+    // 1. Sync scan event to Supabase
+    const targetBatch = (batchCode || batch || "").trim().toUpperCase() || null;
+    if (isSupabaseConfigured) {
+      try {
+        await supabaseQuery("scan_events", {
+          method: "POST",
+          body: {
+            product_slug: productSlug,
+            product_name: productName,
+            batch_code: targetBatch,
+            device_type: deviceType,
+            browser,
+            os,
+          },
+        });
+      } catch (e) {
+        console.error("Supabase scan event sync error:", e);
+      }
+    }
+
+    // 2. Local / Redis analytics record
     await addRecord(record);
 
-    const targetBatch = batchCode || batch;
+    // 3. Batch scan increment
     if (targetBatch) {
       await recordBatchScan(targetBatch);
     }

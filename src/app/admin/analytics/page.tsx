@@ -1,37 +1,42 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   BarChart3, Smartphone, Monitor, Tablet, Globe, Clock,
-  RefreshCw, TrendingUp, Hash, Package, LayoutDashboard, LogOut,
-  Star, MessageSquare, Download
+  RefreshCw, TrendingUp, Hash, Package,
+  Star, MessageSquare, Download, Calendar, Filter
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
+import { checkAuth } from "@/lib/admin-auth";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import type { AnalyticsSnapshot } from "@/lib/analytics-types";
+import { SummaryCard, DeviceIcon } from "@/components/admin/AnalyticsHelpers";
 
 export default function AnalyticsPage() {
   const router = useRouter();
   const [data, setData] = useState<AnalyticsSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dateRange, setDateRange] = useState<{ from: string; to: string }>({ from: "", to: "" });
+  const [quickRange, setQuickRange] = useState<"7d" | "30d" | "90d" | "all">("30d");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/analytics");
+      const params = new URLSearchParams();
+      if (dateRange.from) params.set("from", dateRange.from);
+      if (dateRange.to) params.set("to", dateRange.to);
+      const res = await fetch(`/api/analytics?${params.toString()}`);
       if (res.ok) setData(await res.json());
     } catch {
       // ignore
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [dateRange]);
 
   useEffect(() => {
     if (!checkAuth()) {
-      router.replace("/admin");
+      router.replace("/admin/login?redirect=/admin/analytics");
       return;
     }
     fetchData();
@@ -55,74 +60,147 @@ export default function AnalyticsPage() {
     }
   }, []);
 
+  const handleQuickRange = (range: "7d" | "30d" | "90d" | "all") => {
+    setQuickRange(range);
+    if (range === "all") {
+      setDateRange({ from: "", to: "" });
+      return;
+    }
+    const days = range === "7d" ? 7 : range === "30d" ? 30 : 90;
+    const to = new Date();
+    const from = new Date();
+    from.setDate(to.getDate() - days);
+    setDateRange({
+      from: from.toISOString().split("T")[0],
+      to: to.toISOString().split("T")[0],
+    });
+  };
+
+  const filteredData = useMemo(() => {
+    if (!data) return null;
+    if (!dateRange.from && !dateRange.to) return data;
+    return {
+      ...data,
+      dailyScans: data.dailyScans.filter((d) => {
+        if (dateRange.from && d.date < dateRange.from) return false;
+        if (dateRange.to && d.date > dateRange.to) return false;
+        return true;
+      }),
+      recentScans: data.recentScans.filter((s) => {
+        const scanDate = new Date(s.timestamp).toISOString().split("T")[0];
+        if (dateRange.from && scanDate < dateRange.from) return false;
+        if (dateRange.to && scanDate > dateRange.to) return false;
+        return true;
+      }),
+      productBreakdown: data.productBreakdown.map((p) => ({
+        ...p,
+        count: data.recentScans
+          .filter((s) => s.productName === p.name)
+          .filter((s) => {
+            const scanDate = new Date(s.timestamp).toISOString().split("T")[0];
+            if (dateRange.from && scanDate < dateRange.from) return false;
+            if (dateRange.to && scanDate > dateRange.to) return false;
+            return true;
+          }).length,
+      })).filter((p) => p.count > 0),
+      totalScans: data.recentScans.filter((s) => {
+        const scanDate = new Date(s.timestamp).toISOString().split("T")[0];
+        if (dateRange.from && scanDate < dateRange.from) return false;
+        if (dateRange.to && scanDate > dateRange.to) return false;
+        return true;
+      }).length,
+      totalFeedback: data.recentFeedback.filter((f) => {
+        const feedbackDate = new Date(f.timestamp).toISOString().split("T")[0];
+        if (dateRange.from && feedbackDate < dateRange.from) return false;
+        if (dateRange.to && feedbackDate > dateRange.to) return false;
+        return true;
+      }).length,
+    };
+  }, [data, dateRange]);
+
   const maxProductCount = Math.max(
-    ...(data?.productBreakdown.map((p) => p.count) ?? [1]),
+    ...(filteredData?.productBreakdown.map((p) => p.count) ?? [1]),
     1
   );
   const maxDailyCount = Math.max(
-    ...(data?.dailyScans.map((d) => d.count) ?? [1]),
+    ...(filteredData?.dailyScans.map((d) => d.count) ?? [1]),
     1
   );
 
-  return (
-    <div className="min-h-dvh bg-gray-50 dark:bg-neutral-950">
-      <header className="sticky top-0 z-40 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
-        <div className="flex items-center justify-between px-5 h-14 max-w-3xl mx-auto">
-          <div className="flex items-center gap-2">
-            <img
-              src="/images/kharisfoods-removebg-preview.png"
-              alt="Kharis Foods"
-              className="h-6 w-auto"
-            />
-            <h1 className="font-bold text-gray-800 dark:text-neutral-100 text-sm">Analytics</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-neutral-300 hover:text-gray-800 dark:hover:text-neutral-100 transition-colors"
-            >
-              <LayoutDashboard className="size-3.5" />
-              Dashboard
-            </Link>
-            <button
-              onClick={() => { adminLogout(); router.push("/admin"); }}
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-neutral-400 hover:text-red-500 transition-colors"
-            >
-              <LogOut className="size-3.5" />
-              Logout
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={handleExport}
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              title="Export JSON"
-            >
-              <Download className="size-4 text-gray-400 dark:text-neutral-400" />
-            </Button>
-            <Button
-              onClick={fetchData}
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              title="Refresh"
-            >
-              <RefreshCw
-                className={`size-4 text-gray-400 dark:text-neutral-400 ${loading ? "animate-spin" : ""}`}
-              />
-            </Button>
-          </div>
-        </div>
-      </header>
+  const headerActions = (
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-1 border border-neutral-200 dark:border-neutral-800 rounded-lg p-1">
+        {(["7d", "30d", "90d", "all"] as const).map((range) => (
+          <button
+            key={range}
+            onClick={() => handleQuickRange(range)}
+            className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors ${
+              quickRange === range
+                ? "bg-brand-600 text-white"
+                : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+            }`}
+          >
+            {range === "7d" ? "7d" : range === "30d" ? "30d" : range === "90d" ? "90d" : "All"}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-2 ml-2">
+        <label className="text-xs text-neutral-500 dark:text-neutral-400">From</label>
+        <input
+          type="date"
+          value={dateRange.from}
+          onChange={(e) => setDateRange((prev) => ({ ...prev, from: e.target.value }))}
+          className="px-2 py-1 text-xs rounded border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+        />
+        <label className="text-xs text-neutral-500 dark:text-neutral-400 ml-2">To</label>
+        <input
+          type="date"
+          value={dateRange.to}
+          onChange={(e) => setDateRange((prev) => ({ ...prev, to: e.target.value }))}
+          className="px-2 py-1 text-xs rounded border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+        />
+        {(dateRange.from || dateRange.to) && (
+          <button
+            onClick={() => setDateRange({ from: "", to: "" })}
+            className="text-xs text-brand-600 hover:underline"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <button
+        onClick={handleExport}
+        className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
+      >
+        <Download className="h-3.5 w-3.5" />
+        Export JSON
+      </button>
+      <button
+        onClick={fetchData}
+        disabled={loading}
+        className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
+      >
+        <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+        Refresh
+      </button>
+    </div>
+  );
 
-      <div className="max-w-3xl mx-auto px-5 py-6 space-y-6">
-        {loading && !data ? (
+  return (
+    <div className="animate-in fade-in duration-300">
+      <AdminPageHeader
+        title="Scan Analytics"
+        description="Consumer scan volume, device mix, and product performance across every packaging QR code."
+      >
+        {headerActions}
+      </AdminPageHeader>
+
+      <div className="space-y-6">
+        {loading && !filteredData ? (
           <div className="text-center py-20 text-gray-400 dark:text-neutral-400 text-sm">
             Loading analytics…
           </div>
-        ) : !data || data.totalScans === 0 ? (
+        ) : !filteredData || filteredData.totalScans === 0 ? (
           <div className="text-center py-20">
             <BarChart3 className="size-12 text-gray-300 dark:text-neutral-500 mx-auto mb-3" />
             <p className="text-gray-500 dark:text-neutral-300 text-sm font-medium">No scans yet</p>
@@ -137,38 +215,38 @@ export default function AnalyticsPage() {
               <SummaryCard
                 icon={Hash}
                 label="Total Scans"
-                value={data.totalScans.toLocaleString()}
+                value={filteredData!.totalScans.toLocaleString()}
               />
               <SummaryCard
                 icon={Package}
                 label="Products"
-                value={data.productBreakdown.length.toString()}
+                value={filteredData!.productBreakdown.length.toString()}
               />
               <SummaryCard
                 icon={TrendingUp}
                 label="Top Product"
-                value={data.productBreakdown[0]?.name ?? "-"}
-                sub={data.productBreakdown[0]?.count.toLocaleString() ?? ""}
+                value={filteredData!.productBreakdown[0]?.name ?? "-"}
+                sub={filteredData!.productBreakdown[0]?.count.toLocaleString() ?? ""}
               />
               <SummaryCard
                 icon={Clock}
                 label="Last Scan"
                 value={
-                  data.recentScans.length > 0
-                    ? new Date(data.recentScans[0].timestamp).toLocaleDateString()
+                  filteredData!.recentScans.length > 0
+                    ? new Date(filteredData!.recentScans[0].timestamp).toLocaleDateString()
                     : "-"
                 }
               />
               <SummaryCard
                 icon={Star}
                 label="Avg Rating"
-                value={data.totalFeedback > 0 ? `${data.averageRating} ★` : "-"}
-                sub={`${data.totalFeedback} reviews`}
+                value={filteredData!.totalFeedback > 0 ? `${filteredData!.averageRating} ★` : "-"}
+                sub={`${filteredData!.totalFeedback} reviews`}
               />
               <SummaryCard
                 icon={MessageSquare}
                 label="Feedback"
-                value={data.totalFeedback.toLocaleString()}
+                value={filteredData!.totalFeedback.toLocaleString()}
               />
             </div>
 
@@ -179,7 +257,7 @@ export default function AnalyticsPage() {
                 <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">Scans by Product</h2>
               </div>
               <div className="space-y-3">
-                {data.productBreakdown.map((p) => (
+                {filteredData!.productBreakdown.map((p) => (
                   <div key={p.slug}>
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-sm font-medium text-gray-700 dark:text-neutral-200">
@@ -210,9 +288,9 @@ export default function AnalyticsPage() {
                   Scans Over Time
                 </h2>
               </div>
-              {data.dailyScans.length > 0 ? (
+              {filteredData!.dailyScans.length > 0 ? (
                 <div className="flex items-end gap-1 h-32">
-                  {data.dailyScans.map((d) => (
+                  {filteredData!.dailyScans.map((d) => (
                     <div
                       key={d.date}
                       className="flex-1 flex flex-col items-center gap-1"
@@ -252,7 +330,7 @@ export default function AnalyticsPage() {
                   <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">Devices</h2>
                 </div>
                 <div className="space-y-2.5">
-                  {data.deviceBreakdown.map((d) => (
+                  {data!.deviceBreakdown.map((d) => (
                     <div key={d.type} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <DeviceIcon type={d.type} />
@@ -273,7 +351,7 @@ export default function AnalyticsPage() {
                   <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">Browsers</h2>
                 </div>
                 <div className="space-y-2.5">
-                  {data.browserBreakdown.map((b) => (
+                  {data!.browserBreakdown.map((b) => (
                     <div key={b.name} className="flex items-center justify-between">
                       <span className="text-sm text-gray-600 dark:text-neutral-300">{b.name}</span>
                       <span className="text-sm font-semibold text-gray-800 dark:text-neutral-100">
@@ -291,7 +369,7 @@ export default function AnalyticsPage() {
                   <h2 className="text-sm font-bold text-gray-800 dark:text-neutral-100">OS</h2>
                 </div>
                 <div className="space-y-2.5">
-                  {data.osBreakdown.map((o) => (
+                  {data!.osBreakdown.map((o) => (
                     <div key={o.name} className="flex items-center justify-between">
                       <span className="text-sm text-gray-600 dark:text-neutral-300">{o.name}</span>
                       <span className="text-sm font-semibold text-gray-800 dark:text-neutral-100">
@@ -304,7 +382,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Consumer Feedback Reviews */}
-            {data.totalFeedback > 0 && (
+            {filteredData!.totalFeedback > 0 && (
               <section className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Star className="size-4 text-kharis-gold-500 fill-kharis-gold-500" />
@@ -313,7 +391,7 @@ export default function AnalyticsPage() {
                   </h2>
                 </div>
                 <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
-                  {data.recentFeedback.map((f) => (
+                  {filteredData!.recentFeedback.map((f) => (
                     <div key={f.id} className="p-3 bg-gray-50 dark:bg-neutral-950 rounded-lg border border-gray-100 dark:border-neutral-800">
                       <div className="flex justify-between items-start">
                         <div>
@@ -376,7 +454,7 @@ export default function AnalyticsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.recentScans.map((s) => (
+                    {filteredData!.recentScans.map((s) => (
                       <tr key={s.id} className="border-b border-gray-50 dark:border-neutral-850">
                         <td className="py-2.5 pr-3 text-gray-800 dark:text-neutral-100 font-medium">
                           {s.productName}
@@ -397,42 +475,7 @@ export default function AnalyticsPage() {
         )}
       </div>
     </div>
-  );
-}
-
-function SummaryCard({
-  icon: Icon,
-  label,
-  value,
-  sub,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  sub?: string;
-}) {
-  return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-4">
-      <div className="flex items-center gap-1.5 mb-1">
-        <Icon className="size-3.5 text-gray-400 dark:text-neutral-400" />
-        <span className="text-xs text-gray-500 dark:text-neutral-300 font-medium">{label}</span>
-      </div>
-      <p className="text-lg font-bold text-gray-800 dark:text-neutral-100 truncate">{value}</p>
-      {sub && <p className="text-[11px] text-gray-400 dark:text-neutral-400 mt-0.5">{sub}</p>}
-    </div>
-  );
-}
-
-function DeviceIcon({ type }: { type: string }) {
-  const cls = "size-4 text-gray-400 dark:text-neutral-400";
-  switch (type.toLowerCase()) {
-    case "mobile":
-      return <Smartphone className={cls} />;
-    case "tablet":
-      return <Tablet className={cls} />;
-    case "desktop":
-      return <Monitor className={cls} />;
-    default:
-      return <Smartphone className={cls} />;
-  }
+);
+  // eslint-disable-next-line no-unused-expressions
+  void 0;
 }

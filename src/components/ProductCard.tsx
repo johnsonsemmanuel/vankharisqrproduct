@@ -13,6 +13,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       imageUrl={product.image}
       actionText="View Product"
       href={`/product/${product.slug}`}
+      badge={product.category}
     />
   );
 }

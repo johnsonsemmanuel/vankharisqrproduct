@@ -2,13 +2,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
-  Star, MessageSquare, ThumbsUp, LayoutDashboard, LogOut,
-  RefreshCw, ChevronRight,
+  Star, MessageSquare, ThumbsUp,
+  RefreshCw,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { checkAuth, logout as adminLogout } from "@/lib/admin-auth";
+import { checkAuth } from "@/lib/admin-auth";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import type { AnalyticsSnapshot } from "@/lib/analytics-types";
 
 export default function AdminFeedbackPage() {
@@ -30,57 +29,29 @@ export default function AdminFeedbackPage() {
 
   useEffect(() => {
     if (!checkAuth()) {
-      router.replace("/admin");
+      router.replace("/admin/login?redirect=/admin/feedback");
       return;
     }
     fetchData();
   }, [router, fetchData]);
 
   return (
-    <div className="min-h-dvh bg-gray-50 dark:bg-neutral-950">
-      <header className="sticky top-0 z-40 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
-        <div className="flex items-center justify-between px-5 h-14 max-w-3xl mx-auto">
-          <div className="flex items-center gap-2">
-            <img
-              src="/images/kharisfoods-removebg-preview.png"
-              alt="Kharis Foods"
-              className="h-6 w-auto"
-            />
-            <h1 className="font-bold text-gray-800 dark:text-neutral-100 text-sm">Feedback</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-neutral-300 hover:text-gray-800 dark:hover:text-neutral-100 transition-colors"
-            >
-              <LayoutDashboard className="size-3.5" />
-              Dashboard
-            </Link>
-            <button
-              onClick={() => { adminLogout(); router.push("/admin"); }}
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-neutral-400 hover:text-red-500 transition-colors"
-            >
-              <LogOut className="size-3.5" />
-              Logout
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={fetchData}
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              title="Refresh"
-            >
-              <RefreshCw
-                className={`size-4 text-gray-400 dark:text-neutral-400 ${loading ? "animate-spin" : ""}`}
-              />
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="animate-in fade-in duration-300">
+      <AdminPageHeader
+        title="Customer Feedback"
+        description="Verified consumer ratings and comments across every product batch."
+      >
+        <button
+          onClick={fetchData}
+          disabled={loading}
+          className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
+        >
+          <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+          Refresh
+        </button>
+      </AdminPageHeader>
 
-      <div className="max-w-3xl mx-auto px-5 py-6 space-y-6">
+      <div className="space-y-6">
         {loading && !data ? (
           <div className="text-center py-20 text-gray-400 dark:text-neutral-400 text-sm">
             Loading feedback…

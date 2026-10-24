@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAllBatches, createBatch } from "@/lib/batch-store";
+import { getAllBatches, createBatch, updateBatch, deleteBatch } from "@/lib/batch-store";
 
 export async function GET() {
   try {
@@ -61,5 +61,44 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("POST /api/batches error:", error);
     return NextResponse.json({ ok: false, error: "Failed to create batch" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, batchCode, updates } = body;
+
+    const targetKey = id || batchCode;
+    if (!targetKey) {
+      return NextResponse.json({ ok: false, error: "id or batchCode is required" }, { status: 400 });
+    }
+
+    const updated = await updateBatch(targetKey, updates || {});
+    if (!updated) {
+      return NextResponse.json({ ok: false, error: "Batch not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true, batch: updated });
+  } catch (error) {
+    console.error("PATCH /api/batches error:", error);
+    return NextResponse.json({ ok: false, error: "Failed to update batch" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id") || searchParams.get("code");
+
+    if (!id) {
+      return NextResponse.json({ ok: false, error: "id or code parameter is required" }, { status: 400 });
+    }
+
+    const success = await deleteBatch(id);
+    return NextResponse.json({ ok: success });
+  } catch (error) {
+    console.error("DELETE /api/batches error:", error);
+    return NextResponse.json({ ok: false, error: "Failed to delete batch" }, { status: 500 });
   }
 }
