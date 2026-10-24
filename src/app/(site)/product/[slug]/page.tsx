@@ -18,7 +18,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import AuthenticityCard from "@/components/AuthenticityCard";
 import RecipeViewer from "@/components/RecipeViewer";
 import FeedbackForm from "@/components/FeedbackForm";
-import AuthenticityPopup from "@/components/AuthenticityPopup";
+import AuthenticitySplash from "@/components/AuthenticitySplash";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -30,7 +30,8 @@ export default function ProductPage() {
   const [batch, setBatch] = useState<string | null>(null);
   const [timestamp, setTimestamp] = useState<string | null>(null);
   const [sig, setSig] = useState<string | null>(null);
-  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
+  const [splashDone, setSplashDone] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -40,7 +41,10 @@ export default function ProductPage() {
       setTimestamp(params.get("ts"));
       setSig(params.get("sig"));
       if (b) {
-        setTimeout(() => setShowAuthPopup(true), 800);
+        setSplashDone(false);
+        setShowSplash(true);
+      } else {
+        setSplashDone(true);
       }
     }
   }, []);
@@ -80,11 +84,25 @@ export default function ProductPage() {
 
   return (
     <>
-      <AuthenticityPopup show={showAuthPopup && !!batch} batchCode={batch} productName={product.name} />
+      {batch && (
+        <AuthenticitySplash
+          show={showSplash}
+          onComplete={() => {
+            setShowSplash(false);
+            setSplashDone(true);
+          }}
+        />
+      )}
       <motion.div
-        className="fixed top-0 left-0 right-0 z-50 h-1 origin-left bg-kharis-gold-500"
-        style={{ scaleX }}
-      />
+        initial={batch && !splashDone ? { opacity: 0 } : { opacity: 1 }}
+        animate={{ opacity: splashDone ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+        className={batch && !splashDone ? "pointer-events-none select-none" : ""}
+      >
+        <motion.div
+          className="fixed top-0 left-0 right-0 z-50 h-1 origin-left bg-kharis-gold-500"
+          style={{ scaleX }}
+        />
 
       <motion.div
         initial={{ opacity: 0 }}
