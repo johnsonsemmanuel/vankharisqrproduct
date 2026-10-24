@@ -1,0 +1,26 @@
+VANKHARIS QR & BARCODE QUICK START GUIDE
+=========================================
+
+FOR CUSTOMERS
+-------------
+1. Scan QR code with your phone camera
+2. View product info, recipes & verify authenticity
+3. Leave feedback if desired
+
+FOR RETAILERS
+-------------
+1. Use EAN-13 barcode at POS checkout
+2. Scan QR to verify authenticity if needed
+
+FOR STAFF
+---------
+1. Create batches in Admin > Batch Registry
+2. Generate QR codes in Admin > QR Studio
+3. Generate barcodes in Admin > Product Barcodes
+4. Track scans in Admin > Analytics
+
+SECURITY NOTES
+--------------
+- Only scan from original packaging
+- Suspicious scans may be flagged
+- Each batch is traceable
