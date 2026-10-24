@@ -38,6 +38,19 @@ export default function BarcodeGeneratorCard({
     });
   }, [validEan, barColor, backgroundColor]);
 
+  // Save GTIN to database
+  const handleSaveGtin = async () => {
+    try {
+      await fetch(`/api/products/${productSlug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gtin: validEan }),
+      });
+    } catch {
+      // ignore
+    }
+  };
+
   // Copy Barcode Number
   const handleCopy = () => {
     navigator.clipboard.writeText(validEan);
@@ -152,6 +165,16 @@ export default function BarcodeGeneratorCard({
               className="w-full px-3.5 py-2 text-sm font-mono tracking-wider rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/80 text-neutral-900 dark:text-white focus:outline-none focus:border-brand-500 focus:bg-white dark:focus:bg-neutral-900"
             />
           </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleSaveGtin}
+            className="rounded-xl px-3.5 text-xs gap-1.5 h-9"
+          >
+            <span>Save</span>
+          </Button>
 
           <Button
             type="button"

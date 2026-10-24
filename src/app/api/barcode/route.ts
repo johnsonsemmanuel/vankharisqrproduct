@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { products } from "@/data/products";
+import { getProductByGtin } from "@/lib/product-store";
 import { isSupabaseConfigured, supabaseQuery } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
@@ -11,8 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ ok: false, error: "GTIN required" }, { status: 400 });
     }
 
-    const cleanGtin = gtin.replace(/\D/g, "");
-    const product = products.find((p) => p.gtin === cleanGtin);
+    const product = await getProductByGtin(gtin);
 
     if (!product) {
       return NextResponse.json({ ok: true, found: false }, { status: 404 });
