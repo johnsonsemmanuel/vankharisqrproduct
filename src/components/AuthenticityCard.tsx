@@ -186,28 +186,13 @@ export default function AuthenticityCard({
         <div className="flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
-                Authentic Kharis Foods Product
-              </h3>
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300">
-                Standard Batch
-              </span>
-            </div>
+            <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+              Authentic Kharis Foods Product
+            </h3>
             <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
-              Verified standard production code for batch{" "}
+              Verified production code for batch{" "}
               <strong className="font-mono text-brand-900 dark:text-brand-200">{batch}</strong>.
             </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 pt-2 border-t border-brand-200/60 dark:border-brand-800/50">
-              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
-                <CheckCircle2 className="w-3 h-3" />
-                Freshness Certified
-              </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
-                <CheckCircle2 className="w-3 h-3" />
-                100% Quality Checked
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -220,14 +205,9 @@ export default function AuthenticityCard({
       <div className="flex items-start gap-3">
         <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
-              Authentic Kharis Foods Verified
-            </h3>
-            <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300">
-              Registered Run
-            </span>
-          </div>
+          <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+            Authentic Kharis Foods Verified
+          </h3>
 
           <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
             Officially catalogued production run for{" "}
@@ -256,17 +236,6 @@ export default function AuthenticityCard({
                 <span className="font-mono font-semibold">{batchInfo.scanCount.toLocaleString()}</span>
               </div>
             )}
-          </div>
-
-          <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 pt-2 border-t border-brand-200/60 dark:border-brand-800/50">
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
-              <CheckCircle2 className="w-3 h-3" />
-              Freshness Certified
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-700 dark:text-brand-300">
-              <CheckCircle2 className="w-3 h-3" />
-              FDA Ghana Compliant
-            </div>
           </div>
         </div>
       </div>

@@ -1,12 +1,11 @@
 "use client";
 
-import { Menu, Search, ExternalLink } from "lucide-react";
+import { Search, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 
 interface AdminHeaderProps {
   pathname: string;
-  onMenuClick: () => void;
   onOpenPalette: () => void;
 }
 
@@ -24,19 +23,19 @@ function currentSection(pathname: string) {
   );
 }
 
-export default function AdminHeader({ pathname, onMenuClick, onOpenPalette }: AdminHeaderProps) {
+export default function AdminHeader({ pathname, onOpenPalette }: AdminHeaderProps) {
   const section = currentSection(pathname);
 
   return (
     <header className="sticky top-0 z-30 border-b border-neutral-200 bg-white/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/95">
-      <div className="flex h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <button
-          onClick={onMenuClick}
-          className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 lg:hidden"
-          aria-label="Open navigation menu"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+      <div className="flex h-14 sm:h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
+        <Link href="/admin" className="flex items-center gap-2 lg:hidden">
+          <img
+            src="/images/kharisfoods-removebg-preview.png"
+            alt="Kharis Foods"
+            className="h-6 w-auto"
+          />
+        </Link>
 
         <nav className="flex min-w-0 flex-1 items-center gap-2 text-sm" aria-label="Breadcrumb">
           <Link

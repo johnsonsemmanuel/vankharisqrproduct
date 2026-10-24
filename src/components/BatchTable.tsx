@@ -274,7 +274,7 @@ function BatchTableRow({
             <button
               type="button"
               onClick={onCancelEdit}
-              className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 cursor-pointer"
+              className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 cursor-pointer"
               title="Cancel"
             >
               <X className="w-3.5 h-3.5" />
