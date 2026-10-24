@@ -18,6 +18,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import AuthenticityCard from "@/components/AuthenticityCard";
 import RecipeViewer from "@/components/RecipeViewer";
 import FeedbackForm from "@/components/FeedbackForm";
+import AuthenticityPopup from "@/components/AuthenticityPopup";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -29,13 +30,18 @@ export default function ProductPage() {
   const [batch, setBatch] = useState<string | null>(null);
   const [timestamp, setTimestamp] = useState<string | null>(null);
   const [sig, setSig] = useState<string | null>(null);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      setBatch(params.get("batch"));
+      const b = params.get("batch");
+      setBatch(b);
       setTimestamp(params.get("ts"));
       setSig(params.get("sig"));
+      if (b) {
+        setTimeout(() => setShowAuthPopup(true), 800);
+      }
     }
   }, []);
 
@@ -74,6 +80,7 @@ export default function ProductPage() {
 
   return (
     <>
+      <AuthenticityPopup show={showAuthPopup && !!batch} batchCode={batch} productName={product.name} />
       <motion.div
         className="fixed top-0 left-0 right-0 z-50 h-1 origin-left bg-kharis-gold-500"
         style={{ scaleX }}
