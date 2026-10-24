@@ -6,7 +6,7 @@ import type { FeedbackRecord } from "@/lib/analytics-types";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { productSlug, productName, batchCode, rating, comment } = body;
+    const { productSlug, productName, batchCode, rating, comment, source } = body;
 
     if (!productSlug || !productName || rating == null) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });

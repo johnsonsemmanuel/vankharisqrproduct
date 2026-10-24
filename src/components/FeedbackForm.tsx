@@ -9,9 +9,10 @@ interface FeedbackFormProps {
   productSlug: string;
   productName: string;
   batchCode?: string;
+  source?: "qr" | "barcode" | "direct";
 }
 
-export default function FeedbackForm({ productSlug, productName, batchCode }: FeedbackFormProps) {
+export default function FeedbackForm({ productSlug, productName, batchCode, source = "direct" }: FeedbackFormProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
@@ -33,6 +34,7 @@ export default function FeedbackForm({ productSlug, productName, batchCode }: Fe
           batchCode,
           rating,
           comment,
+          source,
         }),
       });
 

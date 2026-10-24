@@ -227,7 +227,7 @@ export default function ProductPage() {
 
         {/* Feedback Rating Form */}
         <section className="px-4 sm:px-6 py-6 border-t border-neutral-200/80 dark:border-neutral-800">
-          <FeedbackForm productSlug={product.slug} productName={product.name} batchCode={batch || undefined} />
+          <FeedbackForm productSlug={product.slug} productName={product.name} batchCode={batch || undefined} source={batch ? "qr" : "barcode"} />
         </section>
         </div>
 
