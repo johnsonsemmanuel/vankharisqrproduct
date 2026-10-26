@@ -55,6 +55,20 @@ export default function RealtimeBagMockup({
   const isShiny = material.category === "shiny";
   const isClear = material.category === "other";
 
+  // QR color luminance for contrast warning vs material
+  const qrHex = qrColor.replace("#", "");
+  const qrRgb = [
+    parseInt(qrHex.slice(0, 2), 16),
+    parseInt(qrHex.slice(2, 4), 16),
+    parseInt(qrHex.slice(4, 6), 16),
+  ];
+  const qrLuminance =
+    (0.299 * qrRgb[0] + 0.587 * qrRgb[1] + 0.114 * qrRgb[2]) / 255;
+  const qrContrastRatio =
+    (Math.max(luminance, qrLuminance) + 0.05) /
+    (Math.min(luminance, qrLuminance) + 0.05);
+  const qrContrastPoor = qrContrastRatio < 3;
+
   // Dull the grain image for opaque/dark substrates so the material color reads through
   const imageOpacity = isClear ? 1 : 0.85;
   const imageFilter = isClear ? "none" : "brightness(90%) contrast(95%)";
@@ -279,6 +293,18 @@ export default function RealtimeBagMockup({
         <ShieldCheck className="w-3.5 h-3.5 text-kharis-green-600" />
         <span>Authentic Ghana Sack Packaging Profile</span>
       </div>
+
+      {/* QR/Material Contrast Warning */}
+      {qrContrastPoor && (
+        <div className="mt-2 p-2 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
+          <div className="flex items-center gap-2 text-[10px]">
+            <span className="text-amber-700 dark:text-amber-400 font-semibold">⚠ Low Contrast</span>
+            <span className={`text-neutral-600 dark:text-neutral-400 ${qrContrastPoor ? "font-medium" : ""}`}>
+              QR color may be hard to scan on {material.name}. Consider a lighter/darker QR color.
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
