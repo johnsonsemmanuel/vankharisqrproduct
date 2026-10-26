@@ -540,7 +540,7 @@ function BatchRow({
 
   if (editing) {
     return (
-      <tr className="bg-brand-50/50 dark:bg-brand-900/20">
+      <tr className="bg-neutral-50/50 dark:bg-neutral-900/50">
         <td className="px-4 py-2">
           <input
             type="checkbox"
@@ -627,7 +627,7 @@ function BatchRow({
       <td className="px-4 py-3">
         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
           batch.status === "active"
-            ? "bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300"
+            ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
             : batch.status === "depleted"
             ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
             : "bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300"

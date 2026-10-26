@@ -51,7 +51,7 @@ export const InteractiveTravelCard = React.forwardRef<
           </div>
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-600 group-hover:text-white dark:bg-neutral-800 dark:text-brand-300 dark:group-hover:bg-brand-600 dark:group-hover:text-white"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white transition-colors group-hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:group-hover:bg-neutral-200"
           >
             <ArrowUpRight className="h-4 w-4" />
           </span>
