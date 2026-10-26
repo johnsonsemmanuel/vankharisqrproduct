@@ -155,33 +155,33 @@ export default function BarcodeGeneratorCard({
       {/* Barcode Variants */}
       <div className="space-y-3">
         <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Select Variant</p>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <div className="p-3 rounded-xl bg-white border border-neutral-200 flex items-center justify-center overflow-x-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2 w-full">
+            <div className="p-4 rounded-xl bg-white border border-neutral-200 flex items-center justify-center w-full overflow-hidden">
               <div
-                className="max-w-full"
+                className="w-full"
                 dangerouslySetInnerHTML={{ __html: svgBlackOnWhite }}
                 role="img"
                 aria-label="Black on white"
               />
             </div>
-            <p className="text-[10px] text-center text-neutral-500">Black on White</p>
-            <div className="grid grid-cols-2 gap-1">
+            <p className="text-[10px] text-center text-neutral-500">Black on White (Light Packaging)</p>
+            <div className="grid grid-cols-2 gap-1.5">
               <Button type="button" variant="outline" size="sm" onClick={() => handleDownloadSVG(svgBlackOnWhite, "black-on-white")} className="text-[10px] h-7">SVG</Button>
               <Button type="button" variant="primary" size="sm" onClick={() => handleDownloadPNG(svgBlackOnWhite, "black-on-white")} disabled={downloading} className="text-[10px] h-7">PNG</Button>
             </div>
           </div>
-          <div className="space-y-2">
-            <div className="p-3 rounded-xl bg-black border border-neutral-800 flex items-center justify-center overflow-x-auto">
+          <div className="space-y-2 w-full">
+            <div className="p-4 rounded-xl bg-black border border-neutral-800 flex items-center justify-center w-full overflow-hidden">
               <div
-                className="max-w-full"
+                className="w-full"
                 dangerouslySetInnerHTML={{ __html: svgWhiteOnBlack }}
                 role="img"
                 aria-label="White on black"
               />
             </div>
-            <p className="text-[10px] text-center text-neutral-500">White on Black</p>
-            <div className="grid grid-cols-2 gap-1">
+            <p className="text-[10px] text-center text-neutral-500">White on Black (Dark Packaging)</p>
+            <div className="grid grid-cols-2 gap-1.5">
               <Button type="button" variant="outline" size="sm" onClick={() => handleDownloadSVG(svgWhiteOnBlack, "white-on-black")} className="text-[10px] h-7">SVG</Button>
               <Button type="button" variant="primary" size="sm" onClick={() => handleDownloadPNG(svgWhiteOnBlack, "white-on-black")} disabled={downloading} className="text-[10px] h-7">PNG</Button>
             </div>
