@@ -106,12 +106,12 @@ export default function AuthenticityCard({
   // General guide banner (when no batch is provided)
   if (!batch) {
     return (
-      <div className="mx-4 sm:mx-6 mt-4 mb-3 px-4 py-3 rounded-xl border border-brand-200/80 bg-brand-50/60 dark:bg-brand-950/30 dark:border-brand-800/60 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-brand-100/80 dark:bg-brand-900/50 flex items-center justify-center shrink-0">
-          <BadgeCheck className="w-4 h-4 text-brand-700 dark:text-brand-300" />
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 px-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 dark:bg-neutral-900 dark:border-neutral-800 flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center shrink-0">
+          <BadgeCheck className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
         </div>
         <div className="min-w-0">
-          <h3 className="text-xs font-bold text-brand-900 dark:text-brand-100 leading-tight">
+          <h3 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 leading-tight">
             Verified Product Guide
           </h3>
           <p className="text-[11px] text-neutral-600 dark:text-neutral-400 mt-0.5 leading-snug">
@@ -182,16 +182,16 @@ export default function AuthenticityCard({
   // State: Valid format but uncatalogued/fallback batch
   if (state === "unregistered") {
     return (
-      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-brand-200/80 bg-brand-50/60 dark:border-brand-800/60 dark:bg-brand-950/30">
+      <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900">
         <div className="flex items-start gap-3">
-          <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
+          <ShieldCheck className="w-5 h-5 text-neutral-700 dark:text-neutral-300 shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+            <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
               Authentic Kharis Foods Product
             </h3>
-            <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
               Verified production code for batch{" "}
-              <strong className="font-mono text-brand-900 dark:text-brand-200">{batch}</strong>.
+              <strong className="font-mono text-neutral-900 dark:text-neutral-100">{batch}</strong>.
             </p>
           </div>
         </div>
@@ -201,21 +201,21 @@ export default function AuthenticityCard({
 
   // State: Verified Registered Batch
   return (
-    <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-brand-200/80 bg-brand-50/70 dark:border-brand-800/50 dark:bg-brand-950/30">
+    <div className="mx-4 sm:mx-6 mt-4 mb-3 p-4 rounded-xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex items-start gap-3">
-        <ShieldCheck className="w-5 h-5 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
+        <ShieldCheck className="w-5 h-5 text-neutral-700 dark:text-neutral-300 shrink-0 mt-0.5" />
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold text-brand-900 dark:text-brand-100">
+          <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
             Authentic Kharis Foods Verified
           </h3>
 
-          <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">
             Officially catalogued production run for{" "}
-            <strong className="font-semibold text-neutral-900 dark:text-white">{batchInfo?.productName}</strong>
+            <strong className="font-semibold text-neutral-900 dark:text-neutral-100">{batchInfo?.productName}</strong>
             . Packed at {batchInfo?.facility || "Accra Processing Center"}.
           </p>
 
-          <div className="mt-3 pt-2.5 border-t border-brand-200/60 dark:border-brand-800/60 grid grid-cols-2 gap-2 text-[10px] text-brand-800 dark:text-brand-300">
+          <div className="mt-3 pt-2.5 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-2 text-[10px] text-neutral-700 dark:text-neutral-300">
             <div>
               <span className="text-neutral-500 dark:text-neutral-400">Batch Code: </span>
               <span className="font-mono font-semibold">{batchInfo?.batchCode}</span>

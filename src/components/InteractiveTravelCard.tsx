@@ -34,7 +34,7 @@ export const InteractiveTravelCard = React.forwardRef<
             className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           />
           {badge && (
-            <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-800 shadow-xs backdrop-blur-xs dark:bg-neutral-950/85 dark:text-brand-200">
+            <span className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-neutral-900 shadow-sm dark:bg-neutral-900 dark:text-neutral-100">
               {badge}
             </span>
           )}
