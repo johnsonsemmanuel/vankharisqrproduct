@@ -68,7 +68,7 @@ function StatCard({
         <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
           {label}
         </p>
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
           <Icon className="h-4 w-4" />
         </span>
       </div>
@@ -204,8 +204,8 @@ export default function AdminPage() {
                   className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-5 shadow-xs transition-all hover:border-brand-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-700"
                 >
                   <div>
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-600 transition-transform group-hover:scale-105 dark:bg-brand-500">
-                      <Icon className="h-5 w-5 text-white" />
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-900 transition-transform group-hover:scale-105 dark:bg-white">
+                      <Icon className="h-5 w-5 text-white dark:text-neutral-900" />
                     </div>
                     <h3 className="text-sm font-bold text-neutral-900 transition-colors group-hover:text-brand-700 dark:text-neutral-100 dark:group-hover:text-brand-300">
                       {item.title}
@@ -243,7 +243,7 @@ export default function AdminPage() {
             ) : analytics?.recentScans?.length ? (
               analytics.recentScans.slice(0, 6).map((scan) => (
                 <div key={scan.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
                     <ScanLine className="h-3.5 w-3.5" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -326,7 +326,7 @@ export default function AdminPage() {
             ) : batches.length ? (
               batches.slice(0, 5).map((batch) => (
                 <div key={batch.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
                     <Package className="h-3.5 w-3.5" />
                   </span>
                   <div className="min-w-0 flex-1">
