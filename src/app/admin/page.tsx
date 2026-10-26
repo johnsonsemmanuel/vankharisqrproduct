@@ -243,7 +243,7 @@ export default function AdminPage() {
             ) : analytics?.recentScans?.length ? (
               analytics.recentScans.slice(0, 6).map((scan) => (
                 <div key={scan.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
                     <ScanLine className="h-3.5 w-3.5" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -326,7 +326,7 @@ export default function AdminPage() {
             ) : batches.length ? (
               batches.slice(0, 5).map((batch) => (
                 <div key={batch.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
                     <Package className="h-3.5 w-3.5" />
                   </span>
                   <div className="min-w-0 flex-1">
