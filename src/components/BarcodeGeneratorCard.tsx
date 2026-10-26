@@ -23,6 +23,8 @@ export default function BarcodeGeneratorCard({
   const [rawInput, setRawInput] = useState(initialGtin);
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const validEan = useMemo(() => formatToValidEAN13(rawInput), [rawInput]);
 
@@ -40,14 +42,19 @@ export default function BarcodeGeneratorCard({
 
   // Save GTIN to database
   const handleSaveGtin = async () => {
+    setSaving(true);
     try {
       await fetch(`/api/products/${productSlug}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ gtin: validEan }),
       });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
     } catch {
       // ignore
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -124,8 +131,8 @@ export default function BarcodeGeneratorCard({
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-            <BarcodeIcon className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+          <div className="w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white flex items-center justify-center">
+            <BarcodeIcon className="w-4 h-4 text-white dark:text-neutral-900" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
@@ -171,9 +178,10 @@ export default function BarcodeGeneratorCard({
             variant="outline"
             size="sm"
             onClick={handleSaveGtin}
+            disabled={saving}
             className="rounded-xl px-3.5 text-xs gap-1.5 h-9"
           >
-            <span>Save</span>
+            <span>{saving ? "Saving..." : saved ? "Saved" : "Save"}</span>
           </Button>
 
           <Button
