@@ -28,17 +28,28 @@ export default function BarcodeGeneratorCard({
 
   const validEan = useMemo(() => formatToValidEAN13(rawInput), [rawInput]);
 
-  // Generate SVG string
-  const svgString = useMemo(() => {
+  // Generate SVG strings for both variants
+  const svgBlackOnWhite = useMemo(() => {
     return generateEAN13Svg(validEan, {
-      barColor,
-      backgroundColor,
+      barColor: "#000000",
+      backgroundColor: "#FFFFFF",
       scale: 3,
       height: 95,
       includeText: true,
       fontSize: 16,
     });
-  }, [validEan, barColor, backgroundColor]);
+  }, [validEan]);
+
+  const svgWhiteOnBlack = useMemo(() => {
+    return generateEAN13Svg(validEan, {
+      barColor: "#FFFFFF",
+      backgroundColor: "#000000",
+      scale: 3,
+      height: 95,
+      includeText: true,
+      fontSize: 16,
+    });
+  }, [validEan]);
 
   // Save GTIN to database
   const handleSaveGtin = async () => {
@@ -65,24 +76,11 @@ export default function BarcodeGeneratorCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Download SVG
-  const handleDownloadSVG = () => {
-    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `kharis-${productSlug}-barcode-${validEan}.svg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   // Download PNG
-  const handleDownloadPNG = () => {
+  const handleDownloadPNG = (svg: string, variant: string) => {
     setDownloading(true);
     const img = new Image();
-    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
     const URLObject = window.URL || window.webkitURL || window;
     const blobUrl = URLObject.createObjectURL(svgBlob);
 
@@ -93,10 +91,6 @@ export default function BarcodeGeneratorCard({
       canvas.height = img.height * printScale;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        if (backgroundColor && backgroundColor !== "transparent") {
-          ctx.fillStyle = backgroundColor;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
@@ -105,7 +99,7 @@ export default function BarcodeGeneratorCard({
             const pngUrl = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = pngUrl;
-            a.download = `kharis-${productSlug}-barcode-${validEan}.png`;
+            a.download = `kharis-${productSlug}-barcode-${validEan}-${variant}.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -124,6 +118,19 @@ export default function BarcodeGeneratorCard({
       URLObject.revokeObjectURL(blobUrl);
     };
     img.src = blobUrl;
+  };
+
+  // Download SVG
+  const handleDownloadSVG = (svg: string, variant: string) => {
+    const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `kharis-${productSlug}-barcode-${validEan}-${variant}.svg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -145,14 +152,41 @@ export default function BarcodeGeneratorCard({
         </div>
       </div>
 
-      {/* Barcode Display Frame */}
-      <div className="p-6 rounded-xl bg-white border border-neutral-200 flex flex-col items-center justify-center overflow-x-auto">
-        <div
-          className="max-w-full"
-          dangerouslySetInnerHTML={{ __html: svgString }}
-          role="img"
-          aria-label={`Barcode for ${productName}: ${validEan}`}
-        />
+      {/* Barcode Variants */}
+      <div className="space-y-3">
+        <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Select Variant</p>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-2">
+            <div className="p-3 rounded-xl bg-white border border-neutral-200 flex items-center justify-center overflow-x-auto">
+              <div
+                className="max-w-full"
+                dangerouslySetInnerHTML={{ __html: svgBlackOnWhite }}
+                role="img"
+                aria-label="Black on white"
+              />
+            </div>
+            <p className="text-[10px] text-center text-neutral-500">Black on White</p>
+            <div className="grid grid-cols-2 gap-1">
+              <Button type="button" variant="outline" size="sm" onClick={() => handleDownloadSVG(svgBlackOnWhite, "black-on-white")} className="text-[10px] h-7">SVG</Button>
+              <Button type="button" variant="primary" size="sm" onClick={() => handleDownloadPNG(svgBlackOnWhite, "black-on-white")} disabled={downloading} className="text-[10px] h-7">PNG</Button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="p-3 rounded-xl bg-black border border-neutral-800 flex items-center justify-center overflow-x-auto">
+              <div
+                className="max-w-full"
+                dangerouslySetInnerHTML={{ __html: svgWhiteOnBlack }}
+                role="img"
+                aria-label="White on black"
+              />
+            </div>
+            <p className="text-[10px] text-center text-neutral-500">White on Black</p>
+            <div className="grid grid-cols-2 gap-1">
+              <Button type="button" variant="outline" size="sm" onClick={() => handleDownloadSVG(svgWhiteOnBlack, "white-on-black")} className="text-[10px] h-7">SVG</Button>
+              <Button type="button" variant="primary" size="sm" onClick={() => handleDownloadPNG(svgWhiteOnBlack, "white-on-black")} disabled={downloading} className="text-[10px] h-7">PNG</Button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Barcode Number Input */}
@@ -202,29 +236,8 @@ export default function BarcodeGeneratorCard({
       </div>
 
       {/* Download Buttons */}
-      <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-neutral-200 dark:border-neutral-800">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleDownloadSVG}
-          className="rounded-xl text-xs gap-1.5 h-9"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span>Download SVG</span>
-        </Button>
-
-        <Button
-          type="button"
-          variant="primary"
-          size="sm"
-          onClick={handleDownloadPNG}
-          disabled={downloading}
-          className="rounded-xl text-xs gap-1.5 h-9"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span>{downloading ? "Downloading..." : "Download PNG"}</span>
-        </Button>
+      <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800">
+        <p className="text-[10px] text-neutral-500 text-center">Use black on white for light packaging, white on black for dark packaging</p>
       </div>
     </div>
   );
