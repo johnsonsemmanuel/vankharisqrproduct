@@ -204,8 +204,8 @@ export default function AdminPage() {
                   className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-5 shadow-xs transition-all hover:border-brand-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-700"
                 >
                   <div>
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-brand-200 bg-brand-50 transition-transform group-hover:scale-105 dark:border-brand-800 dark:bg-brand-900/40">
-                      <Icon className="h-5 w-5 text-brand-700 dark:text-brand-300" />
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-600 transition-transform group-hover:scale-105 dark:bg-brand-500">
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
                     <h3 className="text-sm font-bold text-neutral-900 transition-colors group-hover:text-brand-700 dark:text-neutral-100 dark:group-hover:text-brand-300">
                       {item.title}
