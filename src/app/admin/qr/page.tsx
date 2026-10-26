@@ -153,19 +153,20 @@ export default function QRStudioMainPage() {
 
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = 1200;
-      canvas.height = 1200;
+      canvas.width = 2048;
+      canvas.height = 2048;
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.fillStyle = qrBgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         canvas.toBlob((blob) => {
           if (blob) {
             const pngUrl = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = pngUrl;
-            a.download = `kharis-${activeProduct.slug}-qr-${batchCode || "guide"}.png`;
+            a.download = `kharis-${activeProduct.slug}-qr-${batchCode || "guide"}-2048px.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

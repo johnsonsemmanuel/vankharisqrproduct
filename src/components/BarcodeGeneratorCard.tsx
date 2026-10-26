@@ -86,7 +86,7 @@ export default function BarcodeGeneratorCard({
 
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      const printScale = 4;
+      const printScale = 8;
       canvas.width = img.width * printScale;
       canvas.height = img.height * printScale;
       const ctx = canvas.getContext("2d");
@@ -99,7 +99,7 @@ export default function BarcodeGeneratorCard({
             const pngUrl = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = pngUrl;
-            a.download = `kharis-${productSlug}-barcode-${validEan}-${variant}.png`;
+            a.download = `kharis-${productSlug}-barcode-${validEan}-${variant}-600dpi.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
