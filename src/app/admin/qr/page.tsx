@@ -482,7 +482,7 @@ export default function QRStudioMainPage() {
             </Button>
 
             {registeredBatch && (
-              <div className="p-3.5 rounded-xl border border-brand-200 bg-brand-50/70 dark:border-brand-800 dark:bg-brand-950/30 flex items-start gap-2.5">
+              <div className="p-3.5 rounded-xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 flex items-start gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-brand-700 dark:text-brand-300 shrink-0 mt-0.5" />
                 <div className="text-xs text-brand-900 dark:text-brand-100">
                   <p className="font-bold">Batch Registered</p>
