@@ -171,8 +171,7 @@ export default function ProductPage() {
           <div className="border-t border-neutral-200/80 dark:border-neutral-800">
             <div className="px-4 sm:px-6 pt-6 pb-2">
               <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                <span className="w-1.5 h-5 bg-brand-600 rounded-full inline-block shrink-0" />
-                <Info className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
+                <Info className="w-4 h-4 text-neutral-700 dark:text-neutral-300 shrink-0" />
                 {locale === "fr" ? "Informations Complémentaires" : "More Information"}
               </h2>
             </div>
