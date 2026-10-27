@@ -196,7 +196,7 @@ export default function AdminSidebar({
                       className={`group flex items-center gap-2.5 rounded-xl border p-3 text-xs font-semibold transition-all duration-200 active:scale-[0.98] ${
                         active
                           ? "border-brand-600 bg-brand-600 text-white shadow-xs dark:border-brand-500 dark:bg-brand-600 dark:text-white"
-                          : "border-neutral-200/80 bg-neutral-50 text-neutral-700 hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-800/60 dark:text-neutral-200 dark:hover:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
+                          : "border-neutral-200/80 bg-neutral-50 text-neutral-700 hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-white"
                       }`}
                     >
                       <Icon
@@ -231,7 +231,7 @@ export default function AdminSidebar({
           <button
             type="button"
             onClick={handleLogout}
-            className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50/70 px-3 py-2.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-100 hover:text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-400 dark:hover:bg-rose-950/60 dark:hover:text-rose-300"
+            className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-100 hover:text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-400 dark:hover:bg-rose-900 dark:hover:text-rose-300"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>Sign Out</span>

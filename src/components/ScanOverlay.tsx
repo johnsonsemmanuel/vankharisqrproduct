@@ -77,9 +77,8 @@ export default function ScanOverlay({ onDone }: { onDone: () => void }) {
         </p>
         <Button
           onClick={onDone}
-          variant="secondary"
           size="lg"
-          className="mt-8 rounded-full font-bold"
+          className="mt-8 rounded-full font-bold bg-[#2e7d32] hover:bg-[#1b5e20] text-white shadow-lg border-0 px-8 py-3 text-sm cursor-pointer transition-all active:scale-95 dark:bg-[#2e7d32] dark:hover:bg-[#1b5e20] dark:text-white"
         >
           Browse Products
         </Button>

@@ -31,7 +31,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
           transition={{ duration: 0.4, delay: 0.15 }}
           className="absolute bottom-0 left-0 right-0 p-5 sm:p-7"
         >
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-brand-800/85 border border-white/15 px-3 py-1 rounded-full backdrop-blur-xs mb-2.5">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-brand-800 px-3 py-1 rounded-full shadow-xs mb-2.5">
             <span className="w-1.5 h-1.5 rounded-full bg-kharis-gold-400" />
             {product.category}
           </span>

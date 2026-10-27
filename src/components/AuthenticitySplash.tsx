@@ -101,7 +101,7 @@ export default function AuthenticitySplash({ show, onComplete }: AuthenticitySpl
                     transition={{ delay: 0.35 }}
                     className="text-xl font-bold text-white"
                   >
-                    Authentic Vankharis Product
+                    Authentic Kharis Foods Product
                   </motion.p>
                   <motion.button
                     initial={{ opacity: 0, y: 15 }}

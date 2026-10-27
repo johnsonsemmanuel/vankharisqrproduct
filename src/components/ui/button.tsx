@@ -20,7 +20,7 @@ const buttonVariants = cva(
         outline:
           "border border-neutral-300 bg-white text-neutral-800 shadow-xs hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700 dark:hover:text-white",
         secondary:
-          "bg-brand-50 text-brand-800 border border-brand-200 shadow-xs hover:bg-brand-100 dark:bg-brand-950/60 dark:text-brand-200 dark:border-brand-800 dark:hover:bg-brand-900/60",
+          "bg-brand-50 text-brand-800 border border-brand-200 shadow-xs hover:bg-brand-100 dark:bg-brand-900 dark:text-brand-100 dark:border-brand-700 dark:hover:bg-brand-800",
         ghost:
           "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white",
         link: "text-brand-700 underline-offset-4 hover:underline dark:text-brand-400",

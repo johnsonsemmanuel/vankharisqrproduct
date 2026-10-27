@@ -38,7 +38,7 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
     <div className="bg-white dark:bg-neutral-900 rounded-xl border border-kharis-green-100 dark:border-neutral-800 overflow-hidden">
       {/* Recipe Tabs */}
       {recipes.length > 1 && (
-        <div className="flex border-b border-kharis-green-100 dark:border-neutral-800 bg-kharis-green-50/20 dark:bg-neutral-950/20 p-1 gap-1">
+        <div className="flex border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-950 p-1 gap-1">
           {recipes.map((r, idx) => (
             <button
               key={r.name}
@@ -80,7 +80,7 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
         </div>
 
         {/* Portion Scaler */}
-        <div className="flex items-center justify-between p-3 rounded-lg bg-kharis-green-50/30 dark:bg-neutral-950/30 border border-kharis-green-100/50 dark:border-neutral-800/50 mb-5">
+        <div className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 mb-5">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-kharis-green-600 dark:text-kharis-gold-500" />
             <span className="text-xs font-bold text-kharis-green-800 dark:text-neutral-200">
@@ -92,7 +92,7 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
               onClick={() => setServings(Math.max(1, servings - 1))}
               disabled={servings <= 1}
               aria-label="Decrease servings"
-              className="w-10 h-10 flex items-center justify-center rounded-lg border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 disabled:opacity-40 cursor-pointer"
+              className="w-10 h-10 flex items-center justify-center rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-40 cursor-pointer"
             >
               <Minus className="w-4 h-4" />
             </button>
@@ -102,7 +102,7 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
             <button
               onClick={() => setServings(servings + 1)}
               aria-label="Increase servings"
-              className="w-10 h-10 flex items-center justify-center rounded-lg border border-kharis-green-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-kharis-green-700 dark:text-neutral-300 hover:bg-kharis-green-50 dark:hover:bg-neutral-700/50 cursor-pointer"
+              className="w-10 h-10 flex items-center justify-center rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -114,7 +114,7 @@ export default function RecipeViewer({ recipes }: RecipeViewerProps) {
           <h4 className="text-xs font-bold text-kharis-green-800 dark:text-neutral-300 uppercase tracking-wider mb-2.5">
             Scaled Ingredients
           </h4>
-          <ul className="divide-y divide-kharis-green-50/50 dark:divide-neutral-800/50 border border-kharis-green-50/50 dark:border-neutral-800/50 rounded-lg overflow-hidden">
+          <ul className="divide-y divide-neutral-200 dark:divide-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
             {recipe.ingredients.map((ing) => {
               const scaledAmount = Number((ing.amount * scaleFactor).toFixed(1));
               return (
